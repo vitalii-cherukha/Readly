@@ -1,11 +1,11 @@
 {
-  "name": "booksy",
+  "name": "readly",
   "private": true,
   "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build --base=/booksy/",
+    "build": "vite build --base=/readly/",
     "preview": "vite preview"
   },
   "devDependencies": {
