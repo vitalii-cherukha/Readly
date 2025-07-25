@@ -1,0 +1,47 @@
+/* article STYLES */
+
+/* mob */
+.section-article {
+  padding-top: 64px;
+  padding-bottom: 64px;
+}
+
+.article-content {
+  margin-bottom: 32px;
+}
+.article-title {
+  font-weight: 600;
+  font-size: 36px;
+
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--color-scheme-1-text);
+  margin-bottom: 24px;
+}
+.article-text {
+  font-size: 18px;
+
+  line-height: 1.5;
+  color: var(--color-scheme-1-text);
+}
+.article-image {
+  border-radius: 16px;
+}
+/* tab */
+@media screen and (min-width: 768px) {
+}
+/* Styles for Desktop devices */
+@media screen and (min-width: 1440px) {
+  .container-article {
+    display: flex;
+    gap: 32px;
+  }
+  .article-content {
+    align-self: center;
+    width: 640px;
+    margin-bottom: 0px;
+  }
+  .article-title {
+    font-size: 40px;
+  }
+}
