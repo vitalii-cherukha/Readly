@@ -3,5 +3,3 @@ import { refs } from './refs';
 //   'beforeend',
 //   '<h2>books.js is connected successfully!</h2>'
 // );
-
-const refs = {};
