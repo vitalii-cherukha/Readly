@@ -1,5 +1,5 @@
 import { refs } from './refs';
-// 111
+
 export const createGallery = books => {
   const galleryCardTemplate = books
     .map(
@@ -7,15 +7,15 @@ export const createGallery = books => {
         `<li class="books-gallery-card">
           <img
             class="books-gallery-img"
-            src="${book.previewImg}"
-            alt="{book.alt}"
+            src="${book.book_image}"
+            alt="${book.description}"
             width="227"
             height="323"
           />
           <div class="books-gallery-card-info">
-            <h3 class="books-gallery-card-title">Daisy Jones & The Six</h3>
-            <p class="books-gallery-card-author">Taylor Jenkins Reid</p>
-            <p class="books-gallery-card-price">$14</p>
+            <h3 class="books-gallery-card-title">${book.title}</h3>
+            <p class="books-gallery-card-author">${book.author}</p>
+            <p class="books-gallery-card-price">$${book.price}</p>
           </div>
           <button class="books-gallery-card-btn" type="button">
             Learn More

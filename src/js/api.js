@@ -30,16 +30,22 @@ export async function getCategoryList() {
 //========================================================================
 
 // --- Retuns the top 5 books from each category
-export async function getTopBooks() {
-  const ENDPOINT = 'https://books-backend.p.goit.global/books/top-books';
+// export async function getTopBooks() {
+//   const ENDPOINT = 'https://books-backend.p.goit.global/books/top-books';
 
-  try {
-    const respData = await axios.get(ENDPOINT);
-    return respData.data;
-  } catch (err) {
-    throw err;
-  }
-}
+//   try {
+//     const respData = await axios.get(ENDPOINT);
+//     return respData.data;
+//   } catch (err) {
+//     throw err;
+//   }
+// }
+
+export const getTopBooks = async () => {
+  const ENDPOINT = 'https://books-backend.p.goit.global/books/top-books';
+  const response = await axios.get(ENDPOINT);
+  return response.data;
+};
 
 //--- Example of getting data ---
 // import { getTopBooks } from './js/api.js';

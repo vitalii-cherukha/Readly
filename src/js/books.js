@@ -1,5 +1,15 @@
 import { refs } from './refs';
-// refs.booksContainerEl.insertAdjacentHTML(
-//   'beforeend',
-//   '<h2>books.js is connected successfully!</h2>'
-// );
+import { getTopBooks } from './api';
+import { createGallery } from './books-render-functions';
+
+const renderTopBooks = async () => {
+  try {
+    const categories = await getTopBooks();
+    const allBooks = categories.flatMap(category => category.books);
+    createGallery(allBooks);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+renderTopBooks();
