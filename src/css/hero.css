@@ -1,0 +1,21 @@
+.hero {
+}
+.container {
+}
+.hero-container {
+}
+.hero-list {
+}
+.hero-item {
+}
+.hero-img {
+}
+.hero-title {
+}
+.main-title {
+  font-weight: 600;
+  font-size: 40px;
+  line-height: 120%;
+  letter-spacing: -0.01em;
+  color: var(--color-scheme-1-text);
+}
