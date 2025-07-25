@@ -77,6 +77,8 @@
   gap: 40px;
 }
 .books-gallery-card {
+  display: flex;
+  flex-direction: column;
   width: 343px;
 }
 
@@ -92,6 +94,7 @@
 .books-gallery-card-info {
   position: relative;
   margin-bottom: 16px;
+  margin-top: auto;
 }
 .books-gallery-card-title {
   font-size: 16px;
