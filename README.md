@@ -29,3 +29,9 @@
 ---
 ## Шляхи до зображень
 Вказуємо шлях до зображень без крапки на початку: ```<img src="/img/hero/test-image.jpg" alt="test">```
+
+## Формат запису атрибута ID для якірних посилань по секціям
+```id = "name-section"``` приклад ```id = "hero-section"```
+
+## Як тестувати pull request локально перед тим як побити merge (для team lead або ревʼюверів)
+![workflow steps](./assets/test-pr.png)
