@@ -10,6 +10,7 @@
 - Swiper
 - simpleLightBox
 - accordeon-js
+- modern-normalize
 
 ---
 ## Структура файлів і папок
