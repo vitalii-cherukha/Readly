@@ -2,5 +2,5 @@ import { refs } from './refs';
 
 refs.feedbacksContainerEl.insertAdjacentHTML(
   'beforeend',
-  '<h2>feedbacks.js is connected successfully!</h2>'
+  '<p>feedbacks.js section</p>'
 );
