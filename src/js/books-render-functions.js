@@ -2,26 +2,32 @@ import { refs } from './refs';
 
 export const createGallery = books => {
   const galleryCardTemplate = books
-    .map(
-      book =>
-        `<li class="books-gallery-card">
-          <img
-            class="books-gallery-img"
-            src="${book.book_image}"
-            alt="${book.description}"
-            width="227"
-            height="323"
-          />
+    .map(book => {
+      const lowTitle = book.title.toLowerCase();
+      const roundPrice = Math.round(Number(book.price));
+
+      return `<li class="books-gallery-card">
+          <div class="books-gallery-img-wrapper">
+            <img
+              class="books-gallery-img"
+              src="${book.book_image}"
+              alt="${book.description}"
+              width="227"
+              height="323"
+            />
+          </div>
           <div class="books-gallery-card-info">
-            <h3 class="books-gallery-card-title">${book.title}</h3>
-            <p class="books-gallery-card-author">${book.author}</p>
-            <p class="books-gallery-card-price">$${book.price}</p>
+            <div class="books-gallery-card-text">
+              <h3 class="books-gallery-card-title">${lowTitle}</h3>
+              <p class="books-gallery-card-author">${book.author}</p>
+            </div>
+            <p class="books-gallery-card-price">$${roundPrice}</p>
           </div>
           <button class="books-gallery-card-btn" type="button">
             Learn More
           </button>
-        </li>`
-    )
+        </li>`;
+    })
     .join('');
   refs.galleryList.innerHTML = galleryCardTemplate;
 };

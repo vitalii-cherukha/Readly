@@ -8,8 +8,12 @@
 :root {
   --font-family: 'Rubik', Inter, Avenir, Helvetica, Arial, sans-serif;
 
+  --text-small-normal: 400 14px / 1.5 "Rubik", sans-serif;
   --text-regular-normal: 400 16px / 1.5 "Rubik", sans-serif;
+  --text-medium-normal: font: 400 18px / 1.5 "Rubik", sans-serif;
+  --text-large-semi-bold: 600 20px / 1.5 "Rubik", sans-serif;
 
+  --display-desktop-tagline: 600 16px / 1.5 "Rubik", sans-serif;
 }
 
 
