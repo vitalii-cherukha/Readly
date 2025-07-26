@@ -13,9 +13,13 @@ export const createGallery = books => {
             height="323"
           />
           <div class="books-gallery-card-info">
-            <h3 class="books-gallery-card-title">${book.title}</h3>
-            <p class="books-gallery-card-author">${book.author}</p>
-            <p class="books-gallery-card-price">$${book.price}</p>
+            <div class="books-galler-card-text">
+              <h3 class="books-gallery-card-title">${book.title.toLowerCase()}</h3>
+              <p class="books-gallery-card-author">${book.author}</p>
+            </div>
+            <p class="books-gallery-card-price">$${Math.round(
+              Number(book.price)
+            )}</p>
           </div>
           <button class="books-gallery-card-btn" type="button">
             Learn More
