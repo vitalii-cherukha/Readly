@@ -32,7 +32,3 @@ const heroSwiper = new Swiper('.hero-swiper', {
   disableOnInteraction: false,
 }
 });
-
-swiperContainer.tabIndex = 0;
-swiperContainer.focus();
-
