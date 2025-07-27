@@ -14,7 +14,7 @@ const heroSwiper = new Swiper('.hero-swiper', {
   },
 
   grabCursor: true, 
-   
+  
   keyboard: {
     enabled: true, 
     onlyInViewport: true, 
@@ -32,7 +32,4 @@ const heroSwiper = new Swiper('.hero-swiper', {
   disableOnInteraction: false,
 }
 });
-
-swiperContainer.tabIndex = 0;
-swiperContainer.focus();
 
