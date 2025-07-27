@@ -1,6 +1,15 @@
 import { refs } from './refs';
-import { getTopBooks } from './api';
-import { createGallery } from './books-render-functions';
+import { getTopBooks, getCategoryList } from './api';
+import { createGallery, createCategory } from './books-render-functions';
+
+const renderCategories = async () => {
+  try {
+    const categories = await getCategoryList();
+    createCategory(categories);
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 const renderTopBooks = async () => {
   try {
@@ -13,3 +22,11 @@ const renderTopBooks = async () => {
 };
 
 renderTopBooks();
+renderCategories();
+
+const onCategoryClick = e => {
+  e.preventDefault();
+  console.log(e);
+};
+
+refs.categoryList.addEventListener('click', onCategoryClick);

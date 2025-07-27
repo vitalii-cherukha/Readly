@@ -35,9 +35,8 @@ export const createGallery = books => {
 export const createCategory = list => {
   const categoryItemTemplate = list
     .map(
-      item =>
-        `<li class="books-nav-category-item">
-          <a href="#">${item.category}</a>
+      item => `<li class="books-nav-category-item">
+          <a href="#">${item.list_name}</a>
         </li>`
     )
     .join('');
