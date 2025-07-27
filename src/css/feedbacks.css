@@ -17,7 +17,7 @@
   box-sizing: border-box;
   overflow: visible;
 }
-.feedback-section .container {
+.feedback-section .feedback-container {
   background-color: #fceee6;
   padding: 64px 16px;
 }
@@ -138,7 +138,7 @@
 }
 
 @media (min-width: 1440px) {
-  .feedback-section .container {
+  .feedback-section .feedback-container {
     padding: 64px;
   }
 
