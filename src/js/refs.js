@@ -5,7 +5,7 @@ export const refs = {
   feedbacksContainerEl: document.querySelector('.feedbacks-container'),
   eventsContainerEl: document.querySelector('.events-container'),
   contactModalContainerEl: document.querySelector('.contact-modal-container'),
-  bookModalContainerEl: document.querySelector('.book-modal-container'),
+  bookModalContainerEl: document.querySelector('.bm-container'),
   footerContainerEl: document.querySelector('.footer-container'),
   heroSection: document.querySelector('.hero'),
 

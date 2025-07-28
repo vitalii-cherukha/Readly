@@ -1,10 +1,51 @@
 /* Блокування прокрутки body при відкритому модальному вікні */
 body.modal-open {
   overflow: hidden;
+  /* Запобігаємо стрибанню контенту при приховуванні скролбара */
+  padding-right: var(--scrollbar-width, 0);
+  /* Для мобільних пристроїв */
+  position: fixed;
+  width: 100%;
+  top: var(--scroll-top, 0);
+  left: 0;
+  /* Приховуємо скролбари body */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  /* Блокуємо touch-action на мобільних */
+  touch-action: none;
+}
+
+/* Приховуємо скролбар WebKit для body */
+body.modal-open::-webkit-scrollbar {
+  display: none;
+}
+
+/* Додаткове приховання скрола для html елемента */
+html.modal-open {
+  overflow: hidden;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  /* Блокуємо touch-action на мобільних */
+  touch-action: none;
+}
+
+/* Приховуємо скролбар WebKit для html */
+html.modal-open::-webkit-scrollbar {
+  display: none;
+}
+
+/* Для більш надійного приховання на iOS */
+@supports (-webkit-touch-callout: none) {
+  body.modal-open {
+    position: fixed;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+  }
 }
 
 /* Modal overlay */
-.book-modal-overlay {
+.bm-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -24,16 +65,43 @@ body.modal-open {
   padding: 16px;
   overflow-y: auto;
   overflow-x: hidden;
+  /* Приховуємо скролбари overlay */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
-.book-modal-overlay.is-open {
+/* Container styles */
+.bm-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+@media screen and (min-width: 768px) {
+  .bm-container {
+    padding: 0 32px;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  .bm-container {
+    padding: 0 104px;
+  }
+}
+
+/* Приховуємо скролбар WebKit для overlay */
+.bm-overlay::-webkit-scrollbar {
+  display: none;
+}
+
+.bm-overlay.is-open {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
 }
 
 /* Modal container */
-.book-modal {
+.bm-window {
   background: var(--color-scheme-1-background);
   width: 100%;
   min-width: 320px;
@@ -45,67 +113,76 @@ body.modal-open {
   position: relative;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
   padding: 16px 16px;
-  /* Приховуємо скролбар для Firefox */
-  scrollbar-width: none;
-  /* Приховуємо скролбар для IE/Edge */
-  -ms-overflow-style: none;
-}
-
-/* Приховуємо скролбар для Chrome/Safari/Opera */
-.book-modal::-webkit-scrollbar {
-  display: none;
+  /* Залишаємо стандартний скрол для модального вікна */
 }
 
 /* Modal header */
-.book-modal-header {
+.bm-header {
   display: flex;
   justify-content: flex-end;
   margin-bottom: 16px;
 }
 
-.book-modal-close {
+.bm-close {
   position: absolute;
   top: 16px;
   right: 16px;
   background: none;
   border: none;
-  padding: 8px;
   cursor: pointer;
   color: var(--color-text-primary);
   transition: color 0.3s ease, transform 0.3s ease;
   z-index: 10;
 }
 
-.book-modal-close:hover,
-.book-modal-close:focus {
+.bm-close:hover,
+.bm-close:focus {
   color: var(--color-bamboo);
   transform: scale(1.1);
 }
 
+/* Icon styles */
+.bm-icon {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+}
+
+.bm-icon-close {
+  width: 32px;
+  height: 32px;
+}
+
+.bm-icon-minus,
+.bm-icon-plus {
+  width: 20px;
+  height: 20px;
+}
+
 /* Modal content */
-.book-modal-content {
+.bm-content {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-.book-modal-content > *:last-child {
+.bm-content > *:last-child {
   margin-bottom: 0;
 }
 
-.book-modal-image-column {
+.bm-image-column {
   margin: 0 auto;
   width: 100%;
 }
 
-.book-modal-cover {
-  margin: 0 auto;
+.bm-cover {
+  margin: 16px auto 0;
   border-radius: 8px;
   width: 309px;
   height: 466px;
 }
 
-.book-modal-title {
+.bm-title {
   font-family: var(--font-family);
   font-size: 40px;
   font-weight: 600;
@@ -114,7 +191,7 @@ body.modal-open {
   margin: 0;
 }
 
-.book-modal-author {
+.bm-author {
   font-family: var(--font-family);
   font-weight: 400;
   font-size: 14px;
@@ -123,7 +200,7 @@ body.modal-open {
   margin: 0;
 }
 
-.book-modal-price {
+.bm-price {
   font-family: var(--font-family);
   font-weight: 400;
   font-size: 24px;
@@ -133,37 +210,37 @@ body.modal-open {
 }
 
 /* Form controls */
-.book-modal-form {
+.bm-form {
   display: flex;
   flex-direction: column;
   margin-bottom: 24px;
 }
 
-.book-modal-image-wrapper {
+.bm-image-wrapper {
   position: relative;
   width: 100%;
   border-radius: 8px;
   overflow: hidden;
 }
 
-.book-modal-quantity-container {
+.bm-quantity-container {
   display: flex;
   align-items: center;
   max-width: 150px;
 }
 
-.book-modal-quantity-container > * {
+.bm-quantity-container > * {
   margin-right: 8px;
 }
 
-.book-modal-quantity-container > *:last-child {
+.bm-quantity-container > *:last-child {
   margin-right: 0;
 }
 
-.book-modal-quantity-btn {
+.bm-quantity-btn {
   border: 1px solid var(--color-neutral-darkest);
   border-radius: 4px;
-  padding: 8px 20px;
+  padding: 8px;
   width: 32px;
   height: 40px;
   background: none;
@@ -172,15 +249,27 @@ body.modal-open {
   align-items: center;
   justify-content: center;
   transition: background-color 0.3s ease, border-color 0.3s ease;
+  color: var(--color-neutral-darkest);
+  user-select: none;
 }
 
-.book-modal-quantity-btn:hover,
-.book-modal-quantity-btn:focus {
+.bm-quantity-btn svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+.bm-quantity-btn:hover,
+.bm-quantity-btn:focus {
   background-color: var(--color-bamboo-light);
-  border-color: var(--color-bamboo);
+  border: 1px solid var(--color-neutral-darkest);
 }
 
-.book-modal-quantity-input {
+.bm-quantity-btn:active {
+  transform: scale(0.95);
+}
+
+.bm-quantity-input {
   border: 1px solid var(--opacity-neutral-darkest-15);
   border-radius: 4px;
   padding: 8px 12px;
@@ -197,16 +286,27 @@ body.modal-open {
   -webkit-appearance: none;
   -moz-appearance: textfield;
   appearance: none;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.bm-quantity-input:focus {
+  outline: none;
+  border-color: var(--color-bamboo);
+  background-color: var(--color-white);
+}
+
+.bm-quantity-input:hover {
+  border-color: var(--color-bamboo);
 }
 
 /* Прибираємо стрілки для Firefox */
-.book-modal-quantity-input::-webkit-outer-spin-button,
-.book-modal-quantity-input::-webkit-inner-spin-button {
+.bm-quantity-input::-webkit-outer-spin-button,
+.bm-quantity-input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
-.book-modal-add-to-cart {
+.bm-add-to-cart {
   background: var(--color-bamboo);
   border: 1px solid var(--color-bamboo);
   border-radius: 4px;
@@ -225,13 +325,13 @@ body.modal-open {
   transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
-.book-modal-add-to-cart:hover,
-.book-modal-add-to-cart:focus {
+.bm-add-to-cart:hover,
+.bm-add-to-cart:focus {
   background-color: var(--color-neutral-darkest);
   border-color: var(--color-neutral-darkest);
 }
 
-.book-modal-buy-now {
+.bm-buy-now {
   background: none;
   border: 1px solid var(--color-neutral-darkest);
   border-radius: 4px;
@@ -248,25 +348,25 @@ body.modal-open {
   transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
-.book-modal-buy-now:hover,
-.book-modal-buy-now:focus {
+.bm-buy-now:hover,
+.bm-buy-now:focus {
   background-color: var(--color-bamboo-light);
   border: 1px solid var(--color-neutral-darkest);
 }
 
 /* Accordion styles */
-.book-modal-accordion {
+.bm-accordion {
   display: flex;
   flex-direction: column;
 }
 
-.book-modal-accordion-item {
+.bm-accordion-item {
   border-top: 1px solid var(--opacity-neutral-darkest-15);
   border-bottom: 1px solid var(--opacity-neutral-darkest-15);
   margin-top: -1px;
 }
 
-.book-modal-accordion-header {
+.bm-accordion-header {
   width: 100%;
   padding: 14px 0;
   background: none;
@@ -283,7 +383,7 @@ body.modal-open {
   position: relative;
 }
 
-.book-modal-accordion-content {
+.bm-accordion-content {
   padding: 0 0 12px;
   height: 0;
   overflow: hidden;
@@ -296,36 +396,36 @@ body.modal-open {
   opacity: 0;
 }
 
-.book-modal-accordion-content.active {
+.bm-accordion-content.active {
   opacity: 1;
   transition: height 0.3s ease-out, opacity 0.3s ease;
 }
 
-.book-modal-chevron-icon {
+.bm-chevron-icon {
   transition: opacity 0.3s ease;
 }
 
-.book-modal-chevron-up {
+.bm-chevron-up {
   opacity: 0;
   position: absolute;
   right: 0;
 }
 
-.book-modal-chevron-down {
+.bm-chevron-down {
   opacity: 1;
 }
 
-.book-modal-accordion-header[aria-expanded='true'] .book-modal-chevron-down {
+.bm-accordion-header[aria-expanded='true'] .bm-chevron-down {
   opacity: 0;
 }
 
-.book-modal-accordion-header[aria-expanded='true'] .book-modal-chevron-up {
+.bm-accordion-header[aria-expanded='true'] .bm-chevron-up {
   opacity: 1;
 }
 
 /* Fixed width for 375px */
 @media screen and (min-width: 375px) and (max-width: 767.98px) {
-  .book-modal {
+  .bm-window {
     width: 335px;
     min-width: unset;
     max-width: none;
@@ -335,12 +435,12 @@ body.modal-open {
 
 /* Tablet styles */
 @media screen and (min-width: 768px) {
-  .book-modal-add-to-cart,
-  .book-modal-buy-now {
+  .bm-add-to-cart,
+  .bm-buy-now {
     width: 307px;
     max-width: none;
   }
-  .book-modal {
+  .bm-window {
     width: 704px;
     min-width: unset;
     max-width: none;
@@ -349,25 +449,25 @@ body.modal-open {
     min-height: fit-content;
   }
 
-  .book-modal-content {
+  .bm-content {
     display: flex;
     flex-direction: row;
     gap: 24px;
   }
 
-  .book-modal-image-column {
+  .bm-image-column {
     width: auto;
     flex-shrink: 0;
     margin: 0;
   }
 
-  .book-modal-cover {
+  .bm-cover {
     width: 309px;
     height: 466.8px;
     margin: 0;
   }
 
-  .book-modal-details {
+  .bm-details {
     flex: 1;
     gap: 14px;
     max-width: none;
@@ -375,7 +475,7 @@ body.modal-open {
     flex-direction: column;
   }
 
-  .book-modal-title {
+  .bm-title {
     font-family: var(--font-family);
     font-weight: 600;
     font-size: 24px;
@@ -384,15 +484,15 @@ body.modal-open {
     color: var(--color-scheme-1-text);
   }
 
-  .book-modal-form {
+  .bm-form {
     margin-top: 24px;
   }
 
-  .book-modal-quantity-container {
+  .bm-quantity-container {
     margin-bottom: 20px;
   }
 
-  .book-modal-buttons-container {
+  .bm-buttons-container {
     display: flex;
     gap: 16px;
     flex-grow: 1;
@@ -401,53 +501,53 @@ body.modal-open {
 
 /* Desktop styles */
 @media screen and (min-width: 1440px) {
-  .book-modal-add-to-cart,
-  .book-modal-buy-now {
+  .bm-add-to-cart,
+  .bm-buy-now {
     width: 309px;
   }
-  .book-modal {
+  .bm-window {
     width: 1300px;
     padding: 64px 104px;
     height: auto;
     min-height: fit-content;
   }
 
-  .book-modal-content {
+  .bm-content {
     gap: 24px;
   }
 
-  .book-modal-image-column {
+  .bm-image-column {
     width: auto;
     flex-shrink: 0;
   }
 
-  .book-modal-details {
+  .bm-details {
     flex: 1;
     gap: 20px;
     max-width: none;
   }
 
-  .book-modal-title {
+  .bm-title {
     font-size: 24px;
   }
 
-  .book-modal-form {
+  .bm-form {
     margin-top: auto;
   }
 
-  .book-modal-buttons-container {
+  .bm-buttons-container {
     display: flex;
     gap: 20px;
     justify-content: flex-start;
   }
 
-  .book-modal-add-to-cart,
-  .book-modal-buy-now {
+  .bm-add-to-cart,
+  .bm-buy-now {
     width: 295px;
     max-width: none;
   }
 
-  .book-modal-accordion {
+  .bm-accordion {
     margin-top: 24px;
   }
 }

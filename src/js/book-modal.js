@@ -4,24 +4,32 @@ import { getBooksById } from './api';
 // Функція для відображення модального вікна з інформацією про книгу
 export async function showBookModal(bookId) {
   try {
+    // Зберігаємо поточну позицію скрола
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+    
+    // Встановлюємо CSS змінні для коректного приховання скрола
+    document.documentElement.style.setProperty('--scroll-top', `-${scrollTop}px`);
+    document.documentElement.style.setProperty('--scrollbar-width', `${scrollbarWidth}px`);
+    
     const response = await getBooksById(bookId);
     const book = response.data;
     
     // Оновлюємо зображення книги
-    const bookCover = document.querySelector('.book-modal-cover');
+    const bookCover = document.querySelector('.bm-cover');
     if (bookCover) {
       bookCover.src = book.book_image;
       bookCover.alt = book.title;
     }
 
     // Оновлюємо інші дані книги
-    const titleEl = document.querySelector('.book-modal-title');
+    const titleEl = document.querySelector('.bm-title');
     if (titleEl) titleEl.textContent = book.title;
 
-    const authorEl = document.querySelector('.book-modal-author');
+    const authorEl = document.querySelector('.bm-author');
     if (authorEl) authorEl.textContent = book.author;
 
-    const priceEl = document.querySelector('.book-modal-price');
+    const priceEl = document.querySelector('.bm-price');
     if (priceEl) priceEl.textContent = book.list_price ? `$${book.list_price}` : 'Price not available';
 
     const detailsContent = document.getElementById('details');
@@ -64,17 +72,31 @@ export async function showBookModal(bookId) {
 
     refs.bookModalContainerEl.classList.add('is-open');
     document.body.classList.add('modal-open');
+    document.documentElement.classList.add('modal-open');
   } catch (error) {
     console.error('Error fetching book details:', error);
   }
 }
 
 export function closeBookModal() {
+  // Отримуємо збережену позицію скрола
+  const scrollTop = getComputedStyle(document.documentElement).getPropertyValue('--scroll-top');
+  
   refs.bookModalContainerEl.classList.remove('is-open');
   document.body.classList.remove('modal-open');
+  document.documentElement.classList.remove('modal-open');
+  
+  // Очищаємо CSS змінні
+  document.documentElement.style.removeProperty('--scroll-top');
+  document.documentElement.style.removeProperty('--scrollbar-width');
+  
+  // Відновлюємо позицію скрола
+  if (scrollTop) {
+    window.scrollTo(0, parseInt(scrollTop.replace('-', '').replace('px', '')));
+  }
 }
 
-const accordionButtons = document.querySelectorAll('.book-modal-accordion-header');
+const accordionButtons = document.querySelectorAll('.bm-accordion-header');
 
 accordionButtons.forEach(button => {
   button.addEventListener('click', () => {
@@ -119,9 +141,46 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-const closeButton = document.querySelector('.book-modal-close');
+const closeButton = document.querySelector('.bm-close');
 if (closeButton) {
   closeButton.addEventListener('click', closeBookModal);
+}
+
+// Обробники для кнопок зміни кількості
+const decreaseBtn = document.getElementById('decreaseBtn');
+const increaseBtn = document.getElementById('increaseBtn');
+const quantityInput = document.getElementById('quantity');
+
+if (decreaseBtn && increaseBtn && quantityInput) {
+  // Функція для зменшення кількості
+  decreaseBtn.addEventListener('click', () => {
+    let currentValue = parseInt(quantityInput.value) || 1;
+    if (currentValue > 1) {
+      quantityInput.value = currentValue - 1;
+    }
+  });
+
+  // Функція для збільшення кількості
+  increaseBtn.addEventListener('click', () => {
+    let currentValue = parseInt(quantityInput.value) || 1;
+    quantityInput.value = currentValue + 1;
+  });
+
+  // Перевірка вводу в поле кількості
+  quantityInput.addEventListener('input', () => {
+    let value = parseInt(quantityInput.value);
+    if (isNaN(value) || value < 1) {
+      quantityInput.value = 1;
+    }
+  });
+
+  // Перевірка при втраті фокуса
+  quantityInput.addEventListener('blur', () => {
+    let value = parseInt(quantityInput.value);
+    if (isNaN(value) || value < 1) {
+      quantityInput.value = 1;
+    }
+  });
 }
 
 // ============= ТЕСТОВИЙ КОД =============
