@@ -1,28 +1,57 @@
-document.addEventListener('footerEventListener', function () {
-  const signupFormBtn = document.getElementById('signupForm');
-  const signUpCloseBtn = document.getElementById('signUpCloseBtn');
-  const footerModal = document.getElementById('footerModal');
-  const emailInput = document.getElementById('footerSubsInput');
+const modal = document.getElementById('signupModal');
+const btn = document.getElementById('signupBtn');
+const span = document.querySelector('.close');
+const alertBox = document.getElementById('customAlert');
+const alertText = document.getElementById('alertText');
 
-  signupFormBtn.addEventListener('submit', function (event) {
-    event.preventDefault();
+function isValidEmail(email) {
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return regex.test(email);
+}
 
-    const email = emailInput.value.trim();
-    if (!email) {
-      alert('Пожалуйста, введите email!');
-      return;
-    }
+function showAlert(message) {
+  alertText.textContent = message;
+  alertBox.style.display = 'block';
 
-    footerModal.style.display = 'block';
-  });
+  setTimeout(() => {
+    alertBox.style.display = 'none';
+  }, 3000);
+}
 
-  signUpCloseBtn.addEventListener('click', function () {
-    footerModal.style.display = 'none';
-  });
+btn.addEventListener('click', function (event) {
+  event.preventDefault();
+  const emailInput = document.getElementById('email');
+  const email = emailInput.value.trim();
 
-  window.addEventListener('click', function (event) {
-    if (event.target === modal) {
-      footerModal.style.display = 'none';
-    }
-  });
+  if (!email) {
+    showAlert('Enter email please.');
+    return;
+  }
+
+  if (!isValidEmail(email)) {
+    showAlert('Wrong email. Please try again!');
+    return;
+  }
+
+  localStorage.setItem('userEmail', email);
+
+  emailInput.value = '';
+
+  modal.style.display = 'block';
+});
+
+span.onclick = function () {
+  modal.style.display = 'none';
+};
+
+window.onclick = function (event) {
+  if (event.target === modal) {
+    modal.style.display = 'none';
+  }
+};
+
+document.addEventListener('keydown', function (event) {
+  if (event.key === 'Escape' && modal.style.display === 'block') {
+    modal.style.display = 'none';
+  }
 });
