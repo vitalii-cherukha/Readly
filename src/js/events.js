@@ -1,14 +1,8 @@
 import Swiper from 'swiper';
-import {
-  Navigation,
-  Pagination,
-  Autoplay,
-  EffectCoverflow,
-} from 'swiper/modules';
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import 'swiper/css/effect-coverflow';
 
 import { openContactModal } from './contact-modal.js';
 
@@ -32,95 +26,141 @@ class EventsManager {
     this.swiper = new Swiper('.events-swiper', {
       modules: [Navigation, Pagination, Autoplay],
 
-      // Basic settings
-      direction: 'horizontal',
-      loop: true,
+      slidesPerView: 1,
+      spaceBetween: 16,
       centeredSlides: false,
 
-      // Responsive breakpoints
-      slidesPerView: 1,
-      spaceBetween: 20,
-
       breakpoints: {
-        640: {
-          slidesPerView: 1,
-          spaceBetween: 24,
-        },
         768: {
           slidesPerView: 2,
-          spaceBetween: 28,
+          spaceBetween: 24,
+          centeredSlides: false,
         },
         1024: {
-          slidesPerView: 2.5,
-          spaceBetween: 32,
+          slidesPerView: 2,
+          spaceBetween: 24,
+          centeredSlides: false,
         },
         1440: {
           slidesPerView: 3,
           spaceBetween: 40,
+          centeredSlides: false,
         },
       },
 
-      // Navigation
       navigation: {
         nextEl: '.events-swiper-button-next',
         prevEl: '.events-swiper-button-prev',
       },
 
-      // Pagination
       pagination: {
         el: '.events-swiper-pagination',
         clickable: true,
-        dynamicBullets: true,
+        dynamicBullets: false,
+        renderBullet: function (index, className) {
+          return '<span class="' + className + '"></span>';
+        },
       },
 
-      // Autoplay
       autoplay: {
-        delay: 4000,
+        delay: 5000,
         disableOnInteraction: false,
         pauseOnMouseEnter: true,
       },
 
-      // Effects
       speed: 600,
       effect: 'slide',
+      loop: true,
+      touchRatio: 1,
+      touchAngle: 45,
+      grabCursor: true,
 
-      // Accessibility
       a11y: {
         prevSlideMessage: 'Previous event',
         nextSlideMessage: 'Next event',
         paginationBulletMessage: 'Go to event {{index}}',
       },
 
-      // Events
       on: {
         init: () => {
-          console.log('Events Swiper initialized');
+          this.addNavigationIcons();
+          this.updateNavigationVisibility();
         },
-        slideChange: () => {
-          // Optional: track slide changes
+        resize: () => {
+          this.updateNavigationVisibility();
+        },
+        breakpoint: () => {
+          this.updateNavigationVisibility();
         },
       },
     });
   }
 
+  addNavigationIcons() {
+    const nextBtn = document.querySelector('.events-swiper-button-next');
+    const prevBtn = document.querySelector('.events-swiper-button-prev');
+
+    if (nextBtn) {
+      nextBtn.innerHTML = `
+        <svg width="24" height="24" aria-hidden="true">
+         <use href="img/sprite.svg#icon-right-arrow-alt" style="fill: white"></use>
+        </svg>
+      `;
+      nextBtn.setAttribute('aria-label', 'Наступна подія');
+    }
+
+    if (prevBtn) {
+      prevBtn.innerHTML = `
+        <svg width="24" height="24" aria-hidden="true">
+          <use href="img/sprite.svg#icon-left-arrow-alt" style="fill: white"></use>
+        </svg>
+      `;
+      prevBtn.setAttribute('aria-label', 'Попередня подія');
+    }
+  }
+
+  updateNavigationVisibility() {
+    const isDesktop = window.innerWidth >= 1440;
+    const nextBtn = document.querySelector('.events-swiper-button-next');
+    const prevBtn = document.querySelector('.events-swiper-button-prev');
+    const navigationContainer = document.querySelector('.events-navigation');
+
+    if (nextBtn && prevBtn) {
+      nextBtn.style.display = isDesktop ? 'none' : 'flex';
+      prevBtn.style.display = isDesktop ? 'none' : 'flex';
+    }
+
+    if (navigationContainer) {
+      navigationContainer.style.display = isDesktop ? 'none' : 'flex';
+    }
+  }
+
   bindEvents() {
-    // Register button clicks
     this.eventsSection.addEventListener(
       'click',
       this.handleEventClick.bind(this)
     );
 
-    // Pause autoplay on hover
-    this.swiperContainer.addEventListener('mouseenter', () => {
-      if (this.swiper && this.swiper.autoplay) {
-        this.swiper.autoplay.stop();
-      }
-    });
+    if (window.innerWidth >= 1024) {
+      this.swiperContainer.addEventListener('mouseenter', () => {
+        if (this.swiper && this.swiper.autoplay) {
+          this.swiper.autoplay.stop();
+        }
+      });
 
-    this.swiperContainer.addEventListener('mouseleave', () => {
-      if (this.swiper && this.swiper.autoplay) {
-        this.swiper.autoplay.start();
-      }
+      this.swiperContainer.addEventListener('mouseleave', () => {
+        if (this.swiper && this.swiper.autoplay) {
+          this.swiper.autoplay.start();
+        }
+      });
+    }
+
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        this.updateNavigationVisibility();
+      }, 100);
     });
   }
 
@@ -132,14 +172,12 @@ class EventsManager {
       const eventName = registerBtn.dataset.event;
       openContactModal(eventName);
 
-      // Optional: pause autoplay when modal opens
       if (this.swiper && this.swiper.autoplay) {
         this.swiper.autoplay.stop();
       }
     }
   }
 
-  // Public methods for external control
   nextSlide() {
     if (this.swiper) {
       this.swiper.slideNext();
@@ -166,13 +204,11 @@ class EventsManager {
   }
 }
 
-// Initialize events manager
 let eventsManagerInstance;
 
 document.addEventListener('DOMContentLoaded', () => {
   eventsManagerInstance = new EventsManager();
 });
 
-// Export for external use
 export { eventsManagerInstance };
 export default EventsManager;

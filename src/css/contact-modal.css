@@ -41,8 +41,8 @@
 
 .contact-modal-close {
   position: absolute;
-  top: 20px;
-  right: 20px;
+  top: 16px;
+  right: 16px;
   width: 32px;
   height: 32px;
   border: none;
@@ -65,9 +65,8 @@
 }
 
 .contact-modal-title {
-  font-family: 'Inter', sans-serif;
+  font: var(--text-large-semi-bold);
   font-size: 32px;
-  font-weight: 700;
   line-height: 1.2;
   color: #1a1a1a;
   text-align: center;
@@ -76,9 +75,8 @@
 }
 
 .contact-modal-event {
-  font-size: 16px;
-  font-weight: 400;
-  color: var(--color-neutral-darkest, #666666);
+  font: var(--text-regular-normal);
+  color: var(--color-neutral-darkest, var(--color-neutral-darkest));
   text-align: center;
   margin-bottom: 40px;
   line-height: 1.4;
@@ -97,11 +95,10 @@
 }
 
 .contact-form-label {
-  font-size: 14px;
+  font: var(--text-small-normal);
   font-weight: 600;
   color: #1a1a1a;
   margin-bottom: 8px;
-  font-family: 'Inter', sans-serif;
 }
 
 .contact-form-input,
@@ -109,8 +106,7 @@
   padding: 8px 12px;
   border: 1px solid transparent;
   border-radius: 4px;
-  font-size: 16px;
-  font-family: 'Inter', sans-serif;
+  font: var(--text-regular-normal);
   transition: all 0.2s ease;
   background-color: rgba(11, 5, 0, 0.05);
   color: #1a1a1a;
@@ -149,19 +145,17 @@
 .contact-form-textarea {
   resize: vertical;
   min-height: 120px;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-family);
 }
 
 .error-text {
-  font-size: 14px;
+  font: var(--text-small-normal);
   height: 18px;
   line-height: 18px;
   color: #ef4444;
-  font-weight: 400;
   margin-top: 4px;
   opacity: 0;
   transition: opacity 0.2s ease;
-  font-family: 'Inter', sans-serif;
 }
 
 .contact-form-input:focus:invalid + .error-text,
@@ -181,9 +175,7 @@
   color: #ffffff;
   border: none;
   border-radius: 4px;
-  font-size: 16px;
-  font-weight: 400;
-  font-family: 'Inter', sans-serif;
+  font: var(--text-regular-normal);
   cursor: pointer;
   transition: all 0.2s ease;
   margin: 8px auto;
@@ -232,16 +224,15 @@
 }
 
 .contact-success-content h3 {
-  font-family: 'Inter', sans-serif;
+  font: var(--text-large-semi-bold);
   font-size: 24px;
-  font-weight: 600;
   margin-bottom: 12px;
   color: #1a1a1a;
 }
 
 .contact-success-content p {
-  font-size: 16px;
-  color: #666666;
+  font: var(--text-regular-normal);
+  color: var(--color-neutral-darkest);
   line-height: 1.5;
 }
 
