@@ -11,14 +11,6 @@ export async function showBookModal(bookId) {
   }
   
   try {
-    // Зберігаємо поточну позицію скрола
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-    
-    // Встановлюємо CSS змінні для коректного приховання скрола
-    document.documentElement.style.setProperty('--scroll-top', `-${scrollTop}px`);
-    document.documentElement.style.setProperty('--scrollbar-width', `${scrollbarWidth}px`);
-    
     const response = await getBooksById(bookId);
     const book = response.data;
     
@@ -110,8 +102,8 @@ export async function showBookModal(bookId) {
       modalOverlay.classList.add('is-open');
     }
     
-    document.body.classList.add('modal-open');
-    document.documentElement.classList.add('modal-open');
+    // Простіше блокування скролу (як в contact-modal)
+    document.body.style.overflow = 'hidden';
     
   } catch (error) {
     console.error('❌ Помилка при завантаженні даних книги:', error);
@@ -119,25 +111,14 @@ export async function showBookModal(bookId) {
 }
 
 export function closeBookModal() {
-  const scrollTop = getComputedStyle(document.documentElement).getPropertyValue('--scroll-top');
-  
   // Видаляємо клас is-open з overlay
   const modalOverlay = document.querySelector('.bm-overlay');
   if (modalOverlay) {
     modalOverlay.classList.remove('is-open');
   }
   
-  document.body.classList.remove('modal-open');
-  document.documentElement.classList.remove('modal-open');
-  
-  // Очищаємо CSS змінні
-  document.documentElement.style.removeProperty('--scroll-top');
-  document.documentElement.style.removeProperty('--scrollbar-width');
-  
-  // Відновлюємо позицію скрола
-  if (scrollTop) {
-    window.scrollTo(0, parseInt(scrollTop.replace('-', '').replace('px', '')));
-  }
+  // Простіше відновлення скролу (як в contact-modal)
+  document.body.style.overflow = '';
 }
 
 // Обробники подій для accordion
