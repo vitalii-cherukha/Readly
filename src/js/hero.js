@@ -14,7 +14,7 @@ const heroSwiper = new Swiper('.hero-swiper', {
   },
 
   grabCursor: true, 
-   
+
   keyboard: {
     enabled: true, 
     onlyInViewport: true, 
