@@ -6,7 +6,7 @@ export const createGallery = books => {
       const lowTitle = book.title.toLowerCase();
       const roundPrice = Math.round(Number(book.price));
 
-      return `<li class="books-gallery-card">
+      return `<li class="books-gallery-card" data-id="${book._id}" >
           <div class="books-gallery-img-wrapper">
             <img
               class="books-gallery-img"
@@ -29,16 +29,43 @@ export const createGallery = books => {
         </li>`;
     })
     .join('');
-  refs.galleryList.innerHTML = galleryCardTemplate;
+  refs.galleryList.insertAdjacentHTML('beforeend', galleryCardTemplate);
 };
 
 export const createCategory = list => {
   const categoryItemTemplate = list
-    .map(
-      item => `<li class="books-nav-category-item">
+    .map(item => {
+      if (item.list_name === '') {
+        return;
+      }
+      return `<li class="books-nav-category-item">
           <a href="#">${item.list_name}</a>
-        </li>`
-    )
+        </li>`;
+    })
     .join('');
   refs.categoryList.innerHTML = categoryItemTemplate;
+};
+
+export const clearGallery = () => {
+  refs.galleryList.innerHTML = '';
+};
+
+export const clearCategory = () => {
+  refs.categoryList.innerHTML = '';
+};
+
+export const showLoader = () => {
+  refs.loader.classList.remove('is-hidden');
+};
+
+export const hideLoader = () => {
+  refs.loader.classList.add('is-hidden');
+};
+
+export const showLoadMoreButton = () => {
+  refs.showMoreBtn.classList.remove('is-hidden');
+};
+
+export const hideLoadMoreButton = () => {
+  refs.showMoreBtn.classList.add('is-hidden');
 };
