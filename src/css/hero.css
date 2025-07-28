@@ -2,14 +2,11 @@
   margin-bottom: 32px;
 }
 
+.hero-container {
+}
 .hero-list {
   margin-bottom: 24px;
 }
-
-.hero-list .swiper-slide {
-  min-height: auto;
-}
-
 .hero-item {
   position: relative;
   width: 343px;
@@ -44,55 +41,30 @@
   left: 16px;
   width: 117px;
   height: 20px;
-
   font-size: 8px;
-  line-height: 150%;
-
+  line-height: 1.5;
   display: flex;
   align-items: center;
   justify-content: center;
-
   background: var(--color-scheme-3-foreground);
   border: 0.52px solid var(--color-scheme-3-foreground);
   border-radius: 2px;
-
   padding: 4px 10px;
   font-family: var(--font-family);
   font-weight: 400;
+  font-size: 8px;
+  line-height: 150%;
   color: var(--color-white);
 }
 
-.hero-swiper-pagination {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  gap: 3px;
-  margin-top: -8px;
-  margin-bottom: 8px;
-}
-
-.hero-swiper-pagination .swiper-pagination-bullet {
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background-color: var(--color-scheme-3-foreground);
-  opacity: 0.3;
-  transition: opacity 0.3s, background-color 0.3s;
-}
-
-.hero-swiper-pagination .swiper-pagination-bullet-active {
-  background-color: var(--color-scheme-3-accent);
-  opacity: 1;
-}
-
-.hero-swiper-btn-wrapper {
+.slide-btn-wrapper {
   display: flex;
   justify-content: end;
   gap: 16px;
   margin-bottom: 24px;
 }
 
-.hero-swiper-btn-prev {
+.swiper-btn-prev {
   border: 1px solid var(--opacity-neutral-darkest-15);
   padding: 12px;
   width: 48px;
@@ -100,7 +72,7 @@
   background: var(--color-scheme-3-foreground);
 }
 
-.hero-swiper-btn-next {
+.swiper-btn-next {
   border: 1px solid var(--opacity-neutral-darkest-15);
   padding: 12px;
   width: 48px;
@@ -141,15 +113,30 @@
   }
 
   .hero-item {
+    position: relative;
     max-width: 100%;
     width: 704px;
   }
   .banner-btn {
+    position: absolute;
     top: 210px;
     left: 40px;
     width: 164px;
     height: 32px;
+    font-size: 8px;
+    line-height: 1.5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-scheme-3-foreground);
+    border: 0.52px solid var(--color-scheme-3-foreground);
+    border-radius: 2px;
+    padding: 4px 10px;
+    font-family: var(--font-family);
+    font-weight: 400;
     font-size: 16px;
+    line-height: 150%;
+    color: var(--color-white);
   }
 
   .main-title {
@@ -157,13 +144,14 @@
   }
 
   .hero-img {
-    border-radius: 11px;
+    border-radius: 8px;
   }
 }
 
 /* ================== PC =================== */
 @media screen and (min-width: 1440px) {
   .hero-item {
+    position: relative;
     max-width: 100%;
     width: 1312px;
   }
@@ -188,6 +176,7 @@
   .banner-btn {
     border-radius: 4px;
     padding: 8px 20px;
+    position: absolute;
     top: 299px;
     left: 56px;
     width: 227px;
