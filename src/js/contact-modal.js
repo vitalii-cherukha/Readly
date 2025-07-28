@@ -1,6 +1,7 @@
 class ContactModal {
   constructor() {
     this.modal = document.querySelector('[data-contact-modal]');
+    this.modalContent = this.modal?.querySelector('.contact-modal');
     this.openBtns = document.querySelectorAll('[data-contact-open]');
     this.closeBtn = document.querySelector('[data-contact-close]');
     this.form = document.querySelector('[data-contact-form]');
@@ -9,6 +10,7 @@ class ContactModal {
 
     this.isOpen = false;
     this.currentEvent = '';
+    this.isFormInteraction = false;
 
     this.init();
   }
@@ -21,13 +23,38 @@ class ContactModal {
   }
 
   bindEvents() {
-    this.closeBtn?.addEventListener('click', () => this.close());
-    this.modal.addEventListener('click', e => {
-      if (e.target === this.modal) this.close();
+    this.closeBtn?.addEventListener('click', e => {
+      e.stopPropagation();
+      this.close();
     });
 
+    this.modal.addEventListener('mousedown', e => {
+      if (e.target === this.modal) {
+        this.isFormInteraction = false;
+      }
+    });
+
+    this.modal.addEventListener('click', e => {
+      if (e.target === this.modal && !this.isFormInteraction) {
+        this.close();
+      }
+    });
+
+    if (this.modalContent) {
+      this.modalContent.addEventListener('mousedown', e => {
+        this.isFormInteraction = true;
+        e.stopPropagation();
+      });
+
+      this.modalContent.addEventListener('click', e => {
+        e.stopPropagation();
+      });
+    }
+
     document.addEventListener('keydown', e => {
-      if (e.key === 'Escape' && this.isOpen) this.close();
+      if (e.key === 'Escape' && this.isOpen) {
+        this.close();
+      }
     });
 
     this.form?.addEventListener('submit', e => this.handleSubmit(e));
@@ -39,10 +66,50 @@ class ContactModal {
     const inputs = this.form.querySelectorAll('input, textarea');
 
     inputs.forEach(input => {
-      input.addEventListener('input', () => this.validateField(input));
+      input.addEventListener('input', e => {
+        this.handleInputFormatting(e);
+        this.validateField(input);
+      });
+
       input.addEventListener('blur', () => this.validateField(input));
-      input.addEventListener('focus', () => this.hideFieldError(input));
+      input.addEventListener('focus', () => {
+        this.hideFieldError(input);
+        this.isFormInteraction = true;
+      });
+
+      input.addEventListener('mousedown', e => {
+        this.isFormInteraction = true;
+        e.stopPropagation();
+      });
     });
+  }
+
+  handleInputFormatting(event) {
+    const input = event.target;
+    const cursorPosition = input.selectionStart;
+    let value = input.value;
+
+    if (input.type === 'text' || input.tagName === 'TEXTAREA') {
+      const newValue = value.replace(/\s{2,}/g, ' ');
+
+      if (newValue !== value) {
+        input.value = newValue;
+
+        const removedSpaces = value.length - newValue.length;
+        input.setSelectionRange(
+          Math.max(0, cursorPosition - removedSpaces),
+          Math.max(0, cursorPosition - removedSpaces)
+        );
+      }
+    }
+
+    if (input.type === 'email') {
+      const newValue = value.replace(/\s/g, '');
+      if (newValue !== value) {
+        input.value = newValue;
+        input.setSelectionRange(cursorPosition - 1, cursorPosition - 1);
+      }
+    }
   }
 
   validateField(field) {
@@ -52,25 +119,31 @@ class ContactModal {
     let isValid = true;
     let errorMessage = '';
 
+    const trimmedValue = field.value.trim();
+
     if (field.name === 'name') {
-      if (!field.value.trim()) {
+      if (!trimmedValue) {
         isValid = false;
         errorMessage = 'Name is required';
-      } else if (field.value.trim().length < 2) {
+      } else if (trimmedValue.length < 2) {
         isValid = false;
         errorMessage = 'Name must be at least 2 characters';
-      } else if (field.value.trim().length > 50) {
+      } else if (trimmedValue.length > 50) {
         isValid = false;
         errorMessage = 'Name must be less than 50 characters';
+      } else if (!/^[a-zA-ZÀ-ÿ\s'-]+$/.test(trimmedValue)) {
+        isValid = false;
+        errorMessage =
+          'Name can only contain letters, spaces, hyphens and apostrophes';
       }
     }
 
     if (field.name === 'email') {
       const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-      if (!field.value.trim()) {
+      if (!trimmedValue) {
         isValid = false;
         errorMessage = 'Email is required';
-      } else if (!emailRegex.test(field.value)) {
+      } else if (!emailRegex.test(trimmedValue)) {
         isValid = false;
         errorMessage = 'Please enter a valid email address';
       }
@@ -120,6 +193,14 @@ class ContactModal {
 
   async handleSubmit(event) {
     event.preventDefault();
+    event.stopPropagation();
+
+    const inputs = this.form.querySelectorAll('input, textarea');
+    inputs.forEach(input => {
+      if (input.type !== 'email') {
+        input.value = input.value.trim();
+      }
+    });
 
     if (!this.validateForm()) {
       const firstInvalid = this.form.querySelector('.invalid');
@@ -173,6 +254,7 @@ class ContactModal {
     if (this.isOpen) return;
 
     this.currentEvent = eventName;
+    this.isFormInteraction = false;
 
     if (this.eventNameEl && eventName) {
       this.eventNameEl.textContent = eventName;
@@ -187,7 +269,10 @@ class ContactModal {
 
     const firstInput = this.form.querySelector('input');
     if (firstInput) {
-      setTimeout(() => firstInput.focus(), 300);
+      setTimeout(() => {
+        firstInput.focus();
+        this.isFormInteraction = true;
+      }, 300);
     }
 
     document.body.style.overflow = 'hidden';
@@ -198,6 +283,7 @@ class ContactModal {
 
     this.modal.classList.remove('is-open');
     this.isOpen = false;
+    this.isFormInteraction = false;
 
     document.body.style.overflow = '';
 
