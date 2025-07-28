@@ -2,14 +2,16 @@
 *::after {
   box-sizing: border-box;
 }
-.swiper-wrapper {
+
+.feedback-list {
   padding: 0;
   margin: 0;
-  list-style: none; /* если это ul */
+  list-style: none;
+  /* если это ul */
   display: flex;
 }
 
-.feedback-section .swiper-slide {
+.feedback-section .feedback-item {
   min-height: auto;
   height: auto;
   margin: 0;
@@ -17,10 +19,12 @@
   box-sizing: border-box;
   overflow: visible;
 }
+
 .feedback-section .feedback-container {
   background-color: #fceee6;
   padding: 64px 16px;
 }
+
 .feedback-section-title {
   font-size: 36px;
   margin-bottom: 24px;
@@ -28,12 +32,14 @@
   line-height: 120%;
   letter-spacing: -0.01em;
 }
+
 .feedback-section-subtitle {
   margin-bottom: 80px;
   font-size: 18px;
   font-weight: 400;
   line-height: 150%;
 }
+
 .feedback-card {
   background: #fceee6;
   border: 1px solid #666;
@@ -44,6 +50,7 @@
   min-height: 314px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
+
 .quote {
   font-size: 18px;
   font-weight: 400;
@@ -51,23 +58,28 @@
   margin-bottom: 24px;
   overflow-wrap: anywhere;
 }
+
 .author {
   display: flex;
   align-items: center;
 }
+
 .avatar {
   width: 48px;
   height: 48px;
   border-radius: 50%;
   margin-right: 16px;
 }
+
 .name {
   font-weight: 600;
   line-height: 150%;
 }
+
 .role {
   color: #666;
 }
+
 /* Управление */
 .feedbacks-controls {
   display: flex;
@@ -118,6 +130,7 @@
   opacity: 0.5;
   pointer-events: none;
 }
+
 /* Adaptive */
 @media (min-width: 768px) {
   .card {
