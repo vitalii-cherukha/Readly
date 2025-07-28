@@ -84,11 +84,12 @@ const feedbackData = [
     avatar: 'https://ui-avatars.com/api/?name=Lucas+Hall&background=random',
   },
 ];
-const feedbackList = document.querySelector('.swiper-wrapper');
+const feedbackList = document.querySelector('.feedback-list');
 
 feedbackData.forEach(feedback => {
   const li = document.createElement('li');
   li.classList.add('swiper-slide');
+  li.classList.add('feedback-item');
   li.innerHTML = `
     <div class="feedback-card">
       <p class="quote">"${feedback.text}"</p>
