@@ -8,8 +8,8 @@ import { openContactModal } from './contact-modal.js';
 
 class EventsManager {
   constructor() {
-    this.eventsSection = document.querySelector('.events');
-    this.swiperContainer = document.querySelector('.events-swiper');
+    this.eventsSection = document.querySelector('.events-section');
+    this.swiperContainer = document.querySelector('.events-section-swiper');
     this.swiper = null;
 
     this.init();
@@ -23,7 +23,7 @@ class EventsManager {
   }
 
   initSwiper() {
-    this.swiper = new Swiper('.events-swiper', {
+    this.swiper = new Swiper('.events-section-swiper', {
       modules: [Navigation, Pagination, Autoplay],
 
       slidesPerView: 1,
@@ -49,12 +49,12 @@ class EventsManager {
       },
 
       navigation: {
-        nextEl: '.events-swiper-button-next',
-        prevEl: '.events-swiper-button-prev',
+        nextEl: '.events-section-swiper-button-next',
+        prevEl: '.events-section-swiper-button-prev',
       },
 
       pagination: {
-        el: '.events-swiper-pagination',
+        el: '.events-section-swiper-pagination',
         clickable: true,
         dynamicBullets: false,
         renderBullet: function (index, className) {
@@ -97,8 +97,12 @@ class EventsManager {
   }
 
   addNavigationIcons() {
-    const nextBtn = document.querySelector('.events-swiper-button-next');
-    const prevBtn = document.querySelector('.events-swiper-button-prev');
+    const nextBtn = document.querySelector(
+      '.events-section-swiper-button-next'
+    );
+    const prevBtn = document.querySelector(
+      '.events-section-swiper-button-prev'
+    );
 
     if (nextBtn) {
       nextBtn.innerHTML = `
@@ -121,9 +125,15 @@ class EventsManager {
 
   updateNavigationVisibility() {
     const isDesktop = window.innerWidth >= 1440;
-    const nextBtn = document.querySelector('.events-swiper-button-next');
-    const prevBtn = document.querySelector('.events-swiper-button-prev');
-    const navigationContainer = document.querySelector('.events-navigation');
+    const nextBtn = document.querySelector(
+      '.events-section-swiper-button-next'
+    );
+    const prevBtn = document.querySelector(
+      '.events-section-swiper-button-prev'
+    );
+    const navigationContainer = document.querySelector(
+      '.events-section-navigation'
+    );
 
     if (nextBtn && prevBtn) {
       nextBtn.style.display = isDesktop ? 'none' : 'flex';
@@ -165,7 +175,7 @@ class EventsManager {
   }
 
   handleEventClick(event) {
-    const registerBtn = event.target.closest('.events-btn');
+    const registerBtn = event.target.closest('.events-section-btn');
 
     if (registerBtn) {
       event.preventDefault();
