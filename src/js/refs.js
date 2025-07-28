@@ -7,6 +7,19 @@ export const refs = {
   contactModalContainerEl: document.querySelector('.contact-modal-container'),
   bookModalContainerEl: document.querySelector('.book-modal-container'),
   footerContainerEl: document.querySelector('.footer-container'),
+  heroSection: document.querySelector('.hero'),
+
+  // ========== header
+
+  openBtn: document.querySelector('.mobile-open-menu-btn'),
+  closeBtn: document.querySelector('.mobile-menu-close-btn'),
+  mobileMenu: document.querySelector('.mobile-menu'),
+  mobileNavLinks: document.querySelectorAll('.mobile-page-menu-link'),
+  desktopNavLinks: document.querySelectorAll('.page-menu-link'),
+  header: document.querySelector('.header'),
+  body: document.body,
+
+  // ========== /header
 
   // ========== books
   galleryList: document.querySelector('.books-gallery-list'),
