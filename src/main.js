@@ -1,4 +1,6 @@
 import 'swiper/css/bundle';
+import 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { refs } from './js/refs.js';
 
 import './js/header.js';
