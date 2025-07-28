@@ -3,7 +3,7 @@
     <div class="footer-wrapper">
       <a class="footer-logo" href="./index.html">
         <svg class="footer-logo-svg">
-          <use href="../img/sprite1.svg#icon-logo"></use>
+          <use href="../img/sprite.svg#icon-logo"></use>
         </svg>
       </a>
       <nav class="footer-nav">
@@ -27,11 +27,12 @@
         </ul>
       </nav>
       <div class="footer-subs">
-        <p class="footer-subs-title">Join</p>
-        <form class="footer-subs-form">
-          <label class="footer-subs-label">
+        
+        <form class="footer-subs-form" id="signupForm">
+          <label for="footerSubsInput" class="footer-subs-title">Join</label>
             <input
               class="footer-subs-input"
+              id="footerSubsInput"
               type="email"
               name="footer-subscription"
               placeholder="Enter your email"
@@ -39,11 +40,22 @@
               required
             />
           </label>
-          <button class="footer-subs-button" type="submit">Sign Up</button>
+          <button class="footer-subs-button" id="signUpBtn" type="submit">
+            Sign Up
+          </button>
           <p class="footer-subs-text">* Required field</p>
         </form>
       </div>
     </div>
     <p class="copyrights">&copy; 2025 Booksy. All rights reserved.</p>
+
+    <!--*========= FOOTER MODAL WINDOW ===== -->
+    <div class="footer-modal" id="footerModal">
+      <div class="footer-modal-content">
+        <p class="footer-modal-text">🎉 Thanks for subscribe!</p>
+        <button class="footer-modal-btn" id="signUpCloseBtn">Close</button>
+      </div>
+    </div>
+    <!--*========= /FOOTER MODAL WINDOW ===== -->
   </div>
 </section>

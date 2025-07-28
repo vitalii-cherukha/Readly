@@ -63,6 +63,7 @@
   .iframe {
     margin: 0 auto;
     max-width: 100%;
+    filter: grayscale(100%) contrast(120%) brightness(90%);
   }
   @media screen and (min-width: 768px) {
     .location-wrapper {
