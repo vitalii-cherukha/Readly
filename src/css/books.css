@@ -64,7 +64,8 @@
   display: none;
 }
 
-.books-dropdown-menu-item {}
+.books-dropdown-menu-item {
+}
 
 /* ============ */
 
@@ -72,7 +73,8 @@
   display: none;
 }
 
-.books-nav-category-item {}
+.books-nav-category-item {
+}
 
 /* ============ */
 
@@ -109,7 +111,6 @@
   margin: 0 auto;
   overflow: hidden;
   flex-shrink: 0;
-
 }
 
 .books-gallery-img {
@@ -132,7 +133,6 @@
 .books-gallery-card-text {
   display: flex;
   flex-direction: column;
-
 }
 
 .books-gallery-card-title {
@@ -143,20 +143,17 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-
 }
 
 .books-gallery-card-author {
   font: var(--text-small-normal);
   color: var(--color-scheme-2-text);
-
 }
 
 .books-gallery-card-price {
   font: var(--text-large-semi-bold);
   color: var(--color-scheme-2-text);
 }
-
 
 .books-gallery-card-btn {
   width: 100%;
@@ -187,7 +184,7 @@
   background-color: var(--color-bamboo);
   color: var(--color-white);
   font: var(--text-regular-normal);
-  margin-bottom: 32px;
+  /* margin-bottom: 32px; */
   transition: background-color linear 250ms;
 }
 
@@ -198,6 +195,10 @@
 
 .books-gallery-btn:active {
   background-color: var(--color-bamboo-darker);
+}
+
+.books-gallery-btn.is-hidden {
+  display: none;
 }
 
 /* Styles for Tablet devices */
@@ -212,31 +213,40 @@
     align-items: center;
   }
 
-  .books-nav-title-box {}
+  .books-nav-title-box {
+  }
 
-  .books-nav-title {}
+  .books-nav-title {
+  }
 
-  .books-nav-counter {}
+  .books-nav-counter {
+  }
 
   /* ============ */
 
-  .books-nav-dropdown {}
+  .books-nav-dropdown {
+  }
 
   .books-dropdown-toggle {
     width: 249px;
   }
 
-  .books-dropdown-arrow {}
+  .books-dropdown-arrow {
+  }
 
-  .books-dropdown-menu {}
+  .books-dropdown-menu {
+  }
 
-  .books-dropdown-menu-item {}
+  .books-dropdown-menu-item {
+  }
 
   /* ============ */
 
-  .books-nav-category {}
+  .books-nav-category {
+  }
 
-  .books-nav-category-item {}
+  .books-nav-category-item {
+  }
 
   /* ============ */
 
@@ -259,23 +269,30 @@
     height: 100%;
   }
 
-  .books-gallery-card:last-child {}
+  .books-gallery-card:last-child {
+  }
 
-  .books-gallery-img {}
+  .books-gallery-img {
+  }
 
-  .books-gallery-card-info {}
+  .books-gallery-card-info {
+  }
 
   .books-gallery-card-title {
     max-width: 287px;
   }
 
-  .books-gallery-card-author {}
+  .books-gallery-card-author {
+  }
 
-  .books-gallery-card-price {}
+  .books-gallery-card-price {
+  }
 
-  .books-gallery-card-btn {}
+  .books-gallery-card-btn {
+  }
 
-  .books-gallery-btn {}
+  .books-gallery-btn {
+  }
 }
 
 /* Styles for Desktop devices */
@@ -298,9 +315,11 @@
     margin-bottom: 0;
   }
 
-  .books-nav-title {}
+  .books-nav-title {
+  }
 
-  .books-nav-counter {}
+  .books-nav-counter {
+  }
 
   .books-nav-dropdown {
     display: none;
@@ -323,39 +342,80 @@
 
   /* ============ */
 
-  .books-gallery {}
+  .books-gallery {
+  }
 
   .books-gallery-list {
     width: 980px;
     grid-template-columns: repeat(4, 1fr);
     row-gap: 40px;
-
-
   }
 
   .books-gallery-card {
     width: 227px;
   }
 
-  .books-gallery-card:last-child {}
+  .books-gallery-card:last-child {
+  }
 
   .books-gallery-img-wrapper {
     /* width: 227px; */
   }
 
-  .books-gallery-img {}
+  .books-gallery-img {
+  }
 
-  .books-gallery-card-info {}
+  .books-gallery-card-info {
+  }
 
   .books-gallery-card-title {
     max-width: 178px;
   }
 
-  .books-gallery-card-author {}
+  .books-gallery-card-author {
+  }
 
-  .books-gallery-card-price {}
+  .books-gallery-card-price {
+  }
 
-  .books-gallery-card-btn {}
+  .books-gallery-card-btn {
+  }
 
-  .books-gallery-btn {}
+  .books-gallery-btn {
+  }
 }
+
+/* ==========  loader ======== */
+.loader {
+  position: relative;
+  width: 100px;
+  height: 100px;
+}
+
+.loader:before,
+.loader:after {
+  content: '';
+  border-radius: 50%;
+  position: absolute;
+  inset: 0;
+  box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.3) inset;
+}
+.loader:after {
+  box-shadow: 0 2px 0 #d84d22 inset;
+  animation: rotate 2s linear infinite;
+}
+
+.loader.is-hidden {
+  display: none;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* ==========  /loader ======== */

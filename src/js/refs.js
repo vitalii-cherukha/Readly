@@ -11,5 +11,7 @@ export const refs = {
   // ========== books
   galleryList: document.querySelector('.books-gallery-list'),
   categoryList: document.querySelector('.books-nav-category'),
+  showMoreBtn: document.querySelector('.books-gallery-btn'),
+  loader: document.querySelector('.loader'),
   // ========== /books
 };
