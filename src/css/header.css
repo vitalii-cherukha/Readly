@@ -1,17 +1,17 @@
 @media screen {
   .header {
     background-color: var(--color-bamboo-lightest);
-    position: fixed;
+/*     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     z-index: 999;
-    transition: transform 300ms ease;
+    transition: transform 300ms ease; */
   }
 
-  .header.hide-on-scroll {
+/*   .header.hide-on-scroll {
     transform: translateY(-100%);
-  }
+  } */
 
   .header-container {
     display: flex;
