@@ -2,7 +2,7 @@ import { refs } from './refs';
 import { initAutoHideHeader } from './auto-hide-header.js';
 
 // Ініціалізуємо логіку фіксованого хедера
-initAutoHideHeader();
+// initAutoHideHeader();
 
 // === Мобільне меню ===
 
