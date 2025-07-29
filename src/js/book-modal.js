@@ -231,46 +231,18 @@ if (addToCartBtn) {
     const quantity = parseInt(quantityInput.value) || 1;
     const bookTitle = document.querySelector('.bm-title')?.textContent || 'книгу';
     
-    // Створюємо і показуємо повідомлення
-    showNotification(`Додано до кошика: ${quantity} x "${bookTitle}"`);
+    // Показуємо стандартне браузерне повідомлення
+    alert(`Додано до кошика: ${quantity} x "${bookTitle}"`);
   });
 }
 
 if (buyNowBtn) {
   buyNowBtn.addEventListener('click', () => {
-    showNotification('Дякуємо за покупку!');
+    alert('Дякуємо за покупку!');
     
-    // Можна додати затримку перед закриттям модального вікна
-    setTimeout(() => {
-      closeBookModal();
-    }, 1500);
+    // Закриваємо модальне вікно відразу після повідомлення
+    closeBookModal();
   });
-}
-
-// Функція для показу повідомлень
-function showNotification(message) {
-  // Створюємо елемент повідомлення
-  const notification = document.createElement('div');
-  notification.className = 'bm-notification';
-  notification.textContent = message;
-  
-  // Додаємо до body
-  document.body.appendChild(notification);
-  
-  // Показуємо з анімацією
-  setTimeout(() => {
-    notification.classList.add('show');
-  }, 100);
-  
-  // Приховуємо через 3 секунди
-  setTimeout(() => {
-    notification.classList.remove('show');
-    setTimeout(() => {
-      if (notification.parentNode) {
-        notification.parentNode.removeChild(notification);
-      }
-    }, 300);
-  }, 3000);
 }
 
 // Інтеграція з секцією books - автоматичне відкриття модального вікна

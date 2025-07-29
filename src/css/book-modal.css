@@ -105,7 +105,7 @@
 .bm-content {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 24px;
 }
 
 .bm-content > *:last-child {
@@ -128,40 +128,31 @@
 }
 
 .bm-title {
-  font-family: var(--font-family);
-  font-size: 40px;
-  font-weight: 600;
-  line-height: 1.2;
+  font-family: var(--display-mobile-xxl);
   color: var(--color-scheme-1-text);
-  margin: 0;
+  margin: 0 0 8px 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .bm-author {
-  font-family: var(--font-family);
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 1.5;
+  font-family: var(--text-small-normal);
   color: var(--color-scheme-2-text);
-  margin: 0;
+  margin: 0 0 8px 0;
 }
 
 .bm-price {
-  font-family: var(--font-family);
-  font-weight: 400;
-  font-size: 24px;
-  line-height: 1.4;
+  font-family: var(--display-desktop-sm);
   color: var(--color-scheme-1-text);
-  margin: 0;
+  margin: 0 0 24px 0;
 }
 
 /* Form controls */
 .bm-form {
   display: flex;
   flex-direction: column;
-  margin-bottom: 24px;
+  margin-bottom: 32px;
 }
 
 .bm-image-wrapper {
@@ -175,6 +166,7 @@
   display: flex;
   align-items: center;
   max-width: 150px;
+  margin-bottom: 16px;
 }
 
 .bm-quantity-container > * {
@@ -224,10 +216,7 @@
   width: 42px;
   height: 40px;
   background: var(--opacity-neutral-darkest-5);
-  font-family: var(--font-family);
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 1.5;
+  font-family: var(--text-regular-normal);
   text-align: center;
   color: var(--color-scheme-1-text);
   /* Прибираємо стрілки для Chrome, Safari, Edge, Opera */
@@ -262,12 +251,8 @@
   width: 100%;
   max-width: 311px;
   height: 48px;
-  font-family: var(--font-family);
-  font-weight: 400;
-  margin-top: 16px;
+  font-family: var(--text-regular-normal);
   margin-bottom: 24px;
-  font-size: 16px;
-  line-height: 1.5;
   color: var(--color-white);
   cursor: pointer;
   transition: background-color 0.3s ease, border-color 0.3s ease;
@@ -287,10 +272,7 @@
   width: 100%;
   max-width: 311px;
   height: 48px;
-  font-family: var(--font-family);
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 1.5;
+  font-family: var(--text-regular-normal);
   color: var(--color-neutral-darkest);
   cursor: pointer;
   transition: background-color 0.3s ease, border-color 0.3s ease;
@@ -306,17 +288,24 @@
 .bm-accordion {
   display: flex;
   flex-direction: column;
+  margin: 0;
+  padding: 0;
 }
 
 .bm-accordion-item {
-  border-top: 1px solid var(--opacity-neutral-darkest-15);
   border-bottom: 1px solid var(--opacity-neutral-darkest-15);
-  margin-top: -1px;
+  margin: 0;
+  padding: 0;
+}
+
+.bm-accordion-item:first-child {
+  border-top: 1px solid var(--opacity-neutral-darkest-15);
 }
 
 .bm-accordion-header {
   width: 100%;
-  padding: 14px 0;
+  padding: 16px 0;
+  margin: 0;
   background: none;
   border: none;
   display: flex;
@@ -332,21 +321,20 @@
 }
 
 .bm-accordion-content {
-  padding: 0 0 12px;
+  padding: 0;
+  margin: 0;
   height: 0;
   overflow: hidden;
-  font-family: var(--font-family);
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 1.5;
+  font-family: var(--text-regular-normal);
   color: var(--color-scheme-1-text);
   transition: height 0.3s ease-out;
   opacity: 0;
 }
 
 .bm-accordion-content.active {
+  padding: 0 0 24px 0;
   opacity: 1;
-  transition: height 0.3s ease-out, opacity 0.3s ease;
+  transition: height 0.3s ease-out, opacity 0.3s ease, padding 0.3s ease;
 }
 
 .bm-chevron-icon {
@@ -371,56 +359,9 @@
   opacity: 1;
 }
 
-/* Стилі для повідомлень */
-.bm-notification {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  background: var(--color-bamboo);
-  color: var(--color-white);
-  padding: 16px 24px;
-  border-radius: 8px;
-  font-family: var(--font-family);
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 1.5;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  z-index: 1000001;
-  transform: translateX(100%);
-  opacity: 0;
-  transition: transform 0.3s ease, opacity 0.3s ease;
-  max-width: 400px;
-  word-wrap: break-word;
-}
-
-.bm-notification.show {
-  transform: translateX(0);
-  opacity: 1;
-}
-
 /* ========================================
    MEDIA QUERIES
 ======================================== */
-
-/* Container responsive styles */
-@media screen and (min-width: 768px) {
-  .bm-container {
-    padding: 0 32px;
-  }
-}
-
-@media screen and (min-width: 1440px) {
-  .bm-container {
-    padding: 0 104px;
-  }
-}
-
-/* Modal overlay positioning */
-@media screen and (min-width: 768px) {
-  .bm-overlay {
-    align-items: center;
-  }
-}
 
 /* Mobile small screens */
 @media screen and (max-width: 374.98px) {
@@ -447,6 +388,13 @@
 
 /* Tablet styles */
 @media screen and (min-width: 768px) {
+  .bm-container {
+    padding: 0 32px;
+  }
+  .bm-overlay {
+    align-items: center;
+  }
+
   .bm-add-to-cart,
   .bm-buy-now {
     width: 307px;
@@ -482,7 +430,6 @@
 
   .bm-details {
     flex: 1;
-    gap: 14px;
     min-width: 0;
     max-width: calc(100% - 309px - 24px);
     display: flex;
@@ -490,6 +437,7 @@
   }
 
   .bm-title {
+    margin: 0 0 8px 0;
     line-height: 1.17;
     letter-spacing: -0.04em;
     white-space: nowrap;
@@ -498,12 +446,8 @@
     overflow-wrap: break-word;
   }
 
-  .bm-form {
-    margin-top: 24px;
-  }
-
   .bm-quantity-container {
-    margin-bottom: 20px;
+    margin-bottom: 24px;
   }
 
   .bm-buttons-container {
@@ -515,6 +459,10 @@
 
 /* Desktop styles */
 @media screen and (min-width: 1440px) {
+  .bm-container {
+    padding: 0 104px;
+  }
+
   .bm-add-to-cart,
   .bm-buy-now {
     width: 309px;
@@ -538,12 +486,20 @@
 
   .bm-details {
     flex: 1;
-    gap: 20px;
     max-width: none;
   }
 
   .bm-form {
-    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .bm-quantity-container {
+    margin-bottom: 24px;
+  }
+
+  .bm-add-to-cart {
+    margin-bottom: 16px;
   }
 
   .bm-buttons-container {
@@ -556,24 +512,6 @@
   .bm-buy-now {
     width: 295px;
     max-width: none;
-  }
-
-  .bm-accordion {
-    margin-top: 24px;
-  }
-}
-
-/* Notification responsive styles */
-@media screen and (max-width: 480px) {
-  .bm-notification {
-    top: 20px;
-    right: 16px;
-    left: 16px;
-    max-width: none;
-    transform: translateY(-100%);
-  }
-
-  .bm-notification.show {
-    transform: translateY(0);
+    margin-bottom: 0;
   }
 }
