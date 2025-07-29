@@ -1,7 +1,7 @@
 @media screen {
   .header {
     background-color: var(--color-bamboo-lightest);
-/*     position: fixed;
+    /*     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -9,7 +9,7 @@
     transition: transform 300ms ease; */
   }
 
-/*   .header.hide-on-scroll {
+  /*   .header.hide-on-scroll {
     transform: translateY(-100%);
   } */
 
@@ -90,9 +90,7 @@ body.menu-open {
   }
 
   .mobile-page-menu-link {
-    font-weight: 500;
-    font-size: 20px;
-    line-height: 1.5;
+    font: var(--text-large-medium);
   }
 
   .mobile-page-menu-link:active {
@@ -128,8 +126,7 @@ body.menu-open {
   }
 
   .page-menu-link {
-    font-size: 16px;
-    line-height: 1.5;
+    font: var(--text-regular-normal);
   }
 
   .page-menu-link:active {
