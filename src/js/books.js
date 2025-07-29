@@ -12,22 +12,24 @@ import {
   hideLoader,
   showLoadMoreButton,
   hideLoadMoreButton,
+  filterUniqueBooksByTitle,
 } from './books-render-functions';
 import iziToast from 'izitoast';
 
-const itemsPerPage = 24;
-const itemsPerPageMobile = 10;
+const firstPerPage = 24;
+const firstPerPageMobile = 10;
+const itemsPerPage = 4;
 let allData = [];
 let currentPage = 1;
 
 const getTotalNow = () => {
-  if (innerWidth < 768) {
-    const total = currentPage * itemsPerPageMobile;
-    return total > allData.length ? allData.length : total;
-  } else {
-    const total = currentPage * itemsPerPage;
-    return total > allData.length ? allData.length : total;
+  if (currentPage === 1) {
+    return innerWidth < 768 ? firstPerPageMobile : firstPerPage;
   }
+
+  const offset = innerWidth < 768 ? firstPerPageMobile : firstPerPage;
+  const total = offset + (currentPage - 1) * itemsPerPage;
+  return total > allData.length ? allData.length : total;
 };
 
 const onRenderCategories = async e => {
@@ -55,10 +57,10 @@ const renderTopBooks = async () => {
     showLoader();
     const categories = await getTopBooks();
     const allBooks = categories.flatMap(category => category.books);
-    allData = allBooks;
+    allData = filterUniqueBooksByTitle(allBooks);
     createGallery(getPageData(currentPage));
     renderCounter(getTotalNow(), allBooks.length);
-    if (currentPage * itemsPerPage < allData.length) {
+    if (getTotalNow() < allData.length) {
       showLoadMoreButton();
     } else {
       hideLoadMoreButton();
@@ -84,11 +86,11 @@ const onCategoryClick = async e => {
       currentPage = 1;
       const searchValue = e.target.textContent.trim();
       const searchQuery = await getBooksByCategory(searchValue);
-      allData = searchQuery;
+      allData = filterUniqueBooksByTitle(searchQuery);
       createGallery(getPageData(currentPage));
       renderCounter(getTotalNow(), allData.length);
     }
-    if (currentPage * itemsPerPage < allData.length) {
+    if (getTotalNow() < allData.length) {
       showLoadMoreButton();
     } else {
       hideLoadMoreButton();
@@ -111,7 +113,7 @@ const onShowMoreClick = async e => {
     createGallery(getPageData(currentPage));
     renderCounter(getTotalNow(), allData.length);
     showLoadMoreButton();
-    if (currentPage * itemsPerPage >= allData.length) {
+    if (getTotalNow() >= allData.length) {
       hideLoadMoreButton();
       iziToast.info({
         message: "We're sorry, but you've reached the end of search results.",
@@ -122,7 +124,7 @@ const onShowMoreClick = async e => {
       refs.galleryList.lastElementChild.getBoundingClientRect().height;
 
     scrollBy({
-      top: heightCard * 2,
+      top: heightCard * 1.2,
       behavior: 'smooth',
     });
   } catch (error) {
@@ -136,15 +138,18 @@ const onShowMoreClick = async e => {
 };
 
 const getPageData = page => {
-  if (innerWidth < 768) {
-    const startIndex = (page - 1) * itemsPerPageMobile;
-    const endIndex = startIndex + itemsPerPageMobile;
-    return allData.slice(startIndex, endIndex);
-  } else {
-    const startIndex = (page - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    return allData.slice(startIndex, endIndex);
+  if (page === 1) {
+    if (innerWidth < 768) {
+      return allData.slice(0, firstPerPageMobile);
+    } else {
+      return allData.slice(0, firstPerPage);
+    }
   }
+
+  const offset = innerWidth < 768 ? firstPerPageMobile : firstPerPage;
+  const startIndex = offset + (page - 2) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  return allData.slice(startIndex, endIndex);
 };
 
 const onOpenDropdownClick = e => {
@@ -163,12 +168,12 @@ const onCategoryDropdownClick = async e => {
       currentPage = 1;
       const searchValue = e.target.textContent.trim();
       const searchQuery = await getBooksByCategory(searchValue);
-      allData = searchQuery;
+      allData = filterUniqueBooksByTitle(searchQuery);
       createGallery(getPageData(currentPage));
       renderCounter(getTotalNow(), allData.length);
     }
 
-    if (currentPage * itemsPerPage < allData.length) {
+    if (currentPage * firstPerPage < allData.length) {
       showLoadMoreButton();
     } else {
       hideLoadMoreButton();
