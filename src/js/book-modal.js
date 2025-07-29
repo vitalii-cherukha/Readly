@@ -1,17 +1,16 @@
 import { refs } from './refs';
 import { getBooksById } from './api';
 
+/** BOOK MODAL MODULE */
+
 // Функція для відображення модального вікна з інформацією про книгу
 export async function showBookModal(bookId) {
+  if (!refs.bookModalContainerEl) {
+    console.error('❌ Модальне вікно не знайдено! Перевірте refs.bookModalContainerEl');
+    return;
+  }
+  
   try {
-    // Зберігаємо поточну позицію скрола
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-    
-    // Встановлюємо CSS змінні для коректного приховання скрола
-    document.documentElement.style.setProperty('--scroll-top', `-${scrollTop}px`);
-    document.documentElement.style.setProperty('--scrollbar-width', `${scrollbarWidth}px`);
-    
     const response = await getBooksById(bookId);
     const book = response.data;
     
@@ -24,13 +23,48 @@ export async function showBookModal(bookId) {
 
     // Оновлюємо інші дані книги
     const titleEl = document.querySelector('.bm-title');
-    if (titleEl) titleEl.textContent = book.title;
+    if (titleEl) {
+      // Перетворюємо назву в правильний формат (кожне слово з великої літери)
+      const formattedTitle = book.title
+        .toLowerCase()
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+      titleEl.textContent = formattedTitle;
+    }
 
     const authorEl = document.querySelector('.bm-author');
     if (authorEl) authorEl.textContent = book.author;
 
     const priceEl = document.querySelector('.bm-price');
-    if (priceEl) priceEl.textContent = book.list_price ? `$${book.list_price}` : 'Price not available';
+    if (priceEl) {
+      // Перевіряємо різні можливі ключі для ціни
+      let price = book.list_price || book.price || book.amazon_price;
+      
+      if (!price && book.buy_links && book.buy_links.length > 0) {
+        // Якщо є посилання для покупки, ціна може бути там
+        const amazonLink = book.buy_links.find(link => link.name === 'Amazon');
+        price = amazonLink?.price;
+      }
+      
+      if (price) {
+        // Конвертуємо ціну в число і округлюємо до цілого
+        const numericPrice = parseFloat(price);
+        if (!isNaN(numericPrice)) {
+          priceEl.textContent = `$${Math.round(numericPrice)}`;
+        } else {
+          // Якщо це не число, показуємо як є з доларом
+          priceEl.textContent = `$${price}`;
+        }
+      } else {
+        // Якщо ціни немає, показуємо посилання на Amazon або "Ціна уточнюється"
+        if (book.amazon_product_url) {
+          priceEl.innerHTML = `<a href="${book.amazon_product_url}" target="_blank" style="color: var(--color-bamboo); text-decoration: none;">Переглянути ціну на Amazon</a>`;
+        } else {
+          priceEl.textContent = 'Ціна уточнюється';
+        }
+      }
+    }
 
     const detailsContent = document.getElementById('details');
     if (detailsContent) {
@@ -70,52 +104,47 @@ export async function showBookModal(bookId) {
       `;
     }
 
-    refs.bookModalContainerEl.classList.add('is-open');
-    document.body.classList.add('modal-open');
-    document.documentElement.classList.add('modal-open');
+    // Додаємо клас is-open до overlay
+    const modalOverlay = document.querySelector('.bm-overlay');
+    if (modalOverlay) {
+      modalOverlay.classList.add('is-open');
+    }
+    
+    // Простіше блокування скролу (як в contact-modal)
+    document.body.style.overflow = 'hidden';
+    
   } catch (error) {
-    console.error('Error fetching book details:', error);
+    console.error('❌ Помилка при завантаженні даних книги:', error);
   }
 }
 
 export function closeBookModal() {
-  // Отримуємо збережену позицію скрола
-  const scrollTop = getComputedStyle(document.documentElement).getPropertyValue('--scroll-top');
-  
-  refs.bookModalContainerEl.classList.remove('is-open');
-  document.body.classList.remove('modal-open');
-  document.documentElement.classList.remove('modal-open');
-  
-  // Очищаємо CSS змінні
-  document.documentElement.style.removeProperty('--scroll-top');
-  document.documentElement.style.removeProperty('--scrollbar-width');
-  
-  // Відновлюємо позицію скрола
-  if (scrollTop) {
-    window.scrollTo(0, parseInt(scrollTop.replace('-', '').replace('px', '')));
+  // Видаляємо клас is-open з overlay
+  const modalOverlay = document.querySelector('.bm-overlay');
+  if (modalOverlay) {
+    modalOverlay.classList.remove('is-open');
   }
+  
+  // Простіше відновлення скролу (як в contact-modal)
+  document.body.style.overflow = '';
 }
 
+// Обробники подій для accordion
 const accordionButtons = document.querySelectorAll('.bm-accordion-header');
 
 accordionButtons.forEach(button => {
   button.addEventListener('click', () => {
-
     const targetId = button.getAttribute('data-target');
     const content = document.getElementById(targetId);
-    
     const isActive = content.classList.contains('active');
     
     if (isActive) {
-
       content.style.height = content.scrollHeight + 'px';
-
       content.offsetHeight;
       content.style.height = '0';
       content.classList.remove('active');
       button.setAttribute('aria-expanded', 'false');
     } else {
-
       content.classList.add('active');
       content.style.height = content.scrollHeight + 'px';
       button.setAttribute('aria-expanded', 'true');
@@ -129,15 +158,29 @@ accordionButtons.forEach(button => {
   });
 });
 
-refs.bookModalContainerEl.addEventListener('click', (e) => {
-  if (e.target === refs.bookModalContainerEl) {
+// Обробники закриття модального вікна
+
+let mouseDownTarget = null;
+
+refs.bookModalContainerEl.addEventListener('mousedown', (e) => {
+  mouseDownTarget = e.target;
+});
+
+refs.bookModalContainerEl.addEventListener('mouseup', (e) => {
+  // Закриваємо модальне вікно тільки якщо mousedown і mouseup відбулися на overlay
+  if (mouseDownTarget === e.target && 
+      (e.target === refs.bookModalContainerEl || e.target.classList.contains('bm-overlay'))) {
     closeBookModal();
   }
+  mouseDownTarget = null;
 });
 
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape' && refs.bookModalContainerEl.classList.contains('is-open')) {
-    closeBookModal();
+  if (e.key === 'Escape') {
+    const modalOverlay = document.querySelector('.bm-overlay');
+    if (modalOverlay && modalOverlay.classList.contains('is-open')) {
+      closeBookModal();
+    }
   }
 });
 
@@ -152,7 +195,6 @@ const increaseBtn = document.getElementById('increaseBtn');
 const quantityInput = document.getElementById('quantity');
 
 if (decreaseBtn && increaseBtn && quantityInput) {
-  // Функція для зменшення кількості
   decreaseBtn.addEventListener('click', () => {
     let currentValue = parseInt(quantityInput.value) || 1;
     if (currentValue > 1) {
@@ -160,13 +202,11 @@ if (decreaseBtn && increaseBtn && quantityInput) {
     }
   });
 
-  // Функція для збільшення кількості
   increaseBtn.addEventListener('click', () => {
     let currentValue = parseInt(quantityInput.value) || 1;
     quantityInput.value = currentValue + 1;
   });
 
-  // Перевірка вводу в поле кількості
   quantityInput.addEventListener('input', () => {
     let value = parseInt(quantityInput.value);
     if (isNaN(value) || value < 1) {
@@ -174,7 +214,6 @@ if (decreaseBtn && increaseBtn && quantityInput) {
     }
   });
 
-  // Перевірка при втраті фокуса
   quantityInput.addEventListener('blur', () => {
     let value = parseInt(quantityInput.value);
     if (isNaN(value) || value < 1) {
@@ -183,10 +222,77 @@ if (decreaseBtn && increaseBtn && quantityInput) {
   });
 }
 
-// ============= ТЕСТОВИЙ КОД =============
-// Видалити цей код після інтеграції з основним функціоналом
-// Додати виклик showBookModal(bookId) при кліку на книгу в основному списку
-// setTimeout(() => {
-//   showBookModal('68680e31ac8a51f74dd6a25b');
-// }, 1000);
-// =======================================
+// Обробники для кнопок "Add To Cart" і "Buy Now"
+const addToCartBtn = document.querySelector('.bm-add-to-cart');
+const buyNowBtn = document.querySelector('.bm-buy-now');
+
+if (addToCartBtn) {
+  addToCartBtn.addEventListener('click', () => {
+    const quantity = parseInt(quantityInput.value) || 1;
+    const bookTitle = document.querySelector('.bm-title')?.textContent || 'книгу';
+    
+    // Створюємо і показуємо повідомлення
+    showNotification(`Додано до кошика: ${quantity} x "${bookTitle}"`);
+  });
+}
+
+if (buyNowBtn) {
+  buyNowBtn.addEventListener('click', () => {
+    showNotification('Дякуємо за покупку!');
+    
+    // Можна додати затримку перед закриттям модального вікна
+    setTimeout(() => {
+      closeBookModal();
+    }, 1500);
+  });
+}
+
+// Функція для показу повідомлень
+function showNotification(message) {
+  // Створюємо елемент повідомлення
+  const notification = document.createElement('div');
+  notification.className = 'bm-notification';
+  notification.textContent = message;
+  
+  // Додаємо до body
+  document.body.appendChild(notification);
+  
+  // Показуємо з анімацією
+  setTimeout(() => {
+    notification.classList.add('show');
+  }, 100);
+  
+  // Приховуємо через 3 секунди
+  setTimeout(() => {
+    notification.classList.remove('show');
+    setTimeout(() => {
+      if (notification.parentNode) {
+        notification.parentNode.removeChild(notification);
+      }
+    }, 300);
+  }, 3000);
+}
+
+// Інтеграція з секцією books - автоматичне відкриття модального вікна
+window.showBookModal = showBookModal;
+
+// Обробник для кнопок "Learn More"
+document.addEventListener('click', (e) => {
+  const isLearnMoreBtn = 
+    e.target.classList.contains('books-gallery-card-btn') ||
+    e.target.textContent?.trim() === 'Learn More' ||
+    e.target.innerText?.trim() === 'Learn More' ||
+    e.target.closest('button')?.textContent?.trim() === 'Learn More';
+  
+  if (isLearnMoreBtn) {
+    let bookListItem = e.target.closest('li[data-id]') ||
+                       e.target.closest('li') ||
+                       e.target.closest('[data-id]');
+    
+    if (bookListItem && bookListItem.dataset.id) {
+      e.preventDefault();
+      e.stopPropagation();
+      showBookModal(bookListItem.dataset.id);
+    }
+  }
+});

@@ -1,7 +1,7 @@
 class ContactModal {
   constructor() {
     this.modal = document.querySelector('[data-contact-modal]');
-    this.modalContent = this.modal?.querySelector('.contact-modal');
+    this.modalContent = this.modal?.querySelector('.contact-modal-wrapper');
     this.openBtns = document.querySelectorAll('[data-contact-open]');
     this.closeBtn = document.querySelector('[data-contact-close]');
     this.form = document.querySelector('[data-contact-form]');
@@ -11,6 +11,7 @@ class ContactModal {
     this.isOpen = false;
     this.currentEvent = '';
     this.isFormInteraction = false;
+    this.mouseDownOnOverlay = false;
 
     this.init();
   }
@@ -20,6 +21,60 @@ class ContactModal {
 
     this.bindEvents();
     this.setupFormValidation();
+    this.bindOpenButtons();
+  }
+
+  bindOpenButtons() {
+    this.openBtns.forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.preventDefault();
+        this.open(btn);
+      });
+    });
+  }
+
+  open(triggerBtn = null) {
+    if (this.isOpen) return;
+
+    if (triggerBtn) {
+      const eventCard = triggerBtn.closest('.event-card');
+      const eventTitle = eventCard?.querySelector('.event-subhead');
+      if (eventTitle && this.eventNameEl) {
+        this.currentEvent = eventTitle.textContent.trim();
+        this.eventNameEl.textContent = this.currentEvent;
+      }
+    }
+
+    this.resetForm();
+    this.form.style.display = 'flex';
+    this.successMessage.style.display = 'none';
+
+    this.modal.classList.add('contact-modal-is-open');
+    document.body.style.overflow = 'hidden';
+    this.isOpen = true;
+    this.isFormInteraction = false;
+    this.mouseDownOnOverlay = false;
+    setTimeout(() => {
+      const firstInput = this.form?.querySelector('input');
+      if (firstInput) {
+        firstInput.focus();
+        this.isFormInteraction = true;
+      }
+    }, 300);
+  }
+
+  close() {
+    if (!this.isOpen) return;
+
+    this.modal.classList.remove('contact-modal-is-open');
+    document.body.style.overflow = '';
+    this.isOpen = false;
+    this.isFormInteraction = false;
+    this.mouseDownOnOverlay = false;
+
+    setTimeout(() => {
+      this.resetForm();
+    }, 300);
   }
 
   bindEvents() {
@@ -30,19 +85,26 @@ class ContactModal {
 
     this.modal.addEventListener('mousedown', e => {
       if (e.target === this.modal) {
+        this.mouseDownOnOverlay = true;
         this.isFormInteraction = false;
       }
     });
 
-    this.modal.addEventListener('click', e => {
-      if (e.target === this.modal && !this.isFormInteraction) {
+    this.modal.addEventListener('mouseup', e => {
+      if (
+        e.target === this.modal &&
+        this.mouseDownOnOverlay &&
+        !this.isFormInteraction
+      ) {
         this.close();
       }
+      this.mouseDownOnOverlay = false;
     });
 
     if (this.modalContent) {
       this.modalContent.addEventListener('mousedown', e => {
         this.isFormInteraction = true;
+        this.mouseDownOnOverlay = false;
         e.stopPropagation();
       });
 
@@ -72,6 +134,7 @@ class ContactModal {
       });
 
       input.addEventListener('blur', () => this.validateField(input));
+
       input.addEventListener('focus', () => {
         this.hideFieldError(input);
         this.isFormInteraction = true;
@@ -79,6 +142,7 @@ class ContactModal {
 
       input.addEventListener('mousedown', e => {
         this.isFormInteraction = true;
+        this.mouseDownOnOverlay = false;
         e.stopPropagation();
       });
     });
@@ -94,7 +158,6 @@ class ContactModal {
 
       if (newValue !== value) {
         input.value = newValue;
-
         const removedSpaces = value.length - newValue.length;
         input.setSelectionRange(
           Math.max(0, cursorPosition - removedSpaces),
@@ -113,8 +176,8 @@ class ContactModal {
   }
 
   validateField(field) {
-    const errorElement = field.parentNode.querySelector('.error-text');
-    if (!errorElement) return;
+    const errorElement = field.parentNode.querySelector('.contact-modal-error');
+    if (!errorElement) return true;
 
     let isValid = true;
     let errorMessage = '';
@@ -157,18 +220,18 @@ class ContactModal {
     errorElement.textContent = errorMessage;
 
     if (isValid) {
-      field.classList.remove('invalid');
-      field.classList.add('valid');
+      field.classList.remove('contact-modal-invalid');
+      field.classList.add('contact-modal-valid');
     } else {
-      field.classList.remove('valid');
-      field.classList.add('invalid');
+      field.classList.remove('contact-modal-valid');
+      field.classList.add('contact-modal-invalid');
     }
 
     return isValid;
   }
 
   hideFieldError(field) {
-    const errorElement = field.parentNode.querySelector('.error-text');
+    const errorElement = field.parentNode.querySelector('.contact-modal-error');
     if (errorElement) {
     }
   }
@@ -203,19 +266,21 @@ class ContactModal {
     });
 
     if (!this.validateForm()) {
-      const firstInvalid = this.form.querySelector('.invalid');
+      const firstInvalid = this.form.querySelector('.contact-modal-invalid');
       if (firstInvalid) {
         firstInvalid.focus();
       }
       return;
     }
 
-    const submitBtn = this.form.querySelector('.contact-form-btn');
-    const originalText = submitBtn.textContent;
+    const submitBtn = this.form.querySelector('button[type="submit"]');
+    const originalText = submitBtn?.textContent || 'Register';
 
     try {
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Registering...';
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Registering...';
+      }
 
       await this.simulateSubmission();
 
@@ -224,8 +289,10 @@ class ContactModal {
       console.error('Registration failed:', error);
       this.showError('Registration failed. Please try again.');
     } finally {
-      submitBtn.disabled = false;
-      submitBtn.textContent = originalText;
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+      }
     }
   }
 
@@ -250,48 +317,6 @@ class ContactModal {
     alert(message);
   }
 
-  open(eventName = '') {
-    if (this.isOpen) return;
-
-    this.currentEvent = eventName;
-    this.isFormInteraction = false;
-
-    if (this.eventNameEl && eventName) {
-      this.eventNameEl.textContent = eventName;
-    }
-
-    this.resetForm();
-    this.form.style.display = 'flex';
-    this.successMessage.style.display = 'none';
-
-    this.modal.classList.add('is-open');
-    this.isOpen = true;
-
-    const firstInput = this.form.querySelector('input');
-    if (firstInput) {
-      setTimeout(() => {
-        firstInput.focus();
-        this.isFormInteraction = true;
-      }, 300);
-    }
-
-    document.body.style.overflow = 'hidden';
-  }
-
-  close() {
-    if (!this.isOpen) return;
-
-    this.modal.classList.remove('is-open');
-    this.isOpen = false;
-    this.isFormInteraction = false;
-
-    document.body.style.overflow = '';
-
-    setTimeout(() => {
-      this.resetForm();
-    }, 300);
-  }
-
   resetForm() {
     if (!this.form) return;
 
@@ -299,13 +324,17 @@ class ContactModal {
 
     const fields = this.form.querySelectorAll('input, textarea');
     fields.forEach(field => {
-      field.classList.remove('valid', 'invalid');
+      field.classList.remove('contact-modal-valid', 'contact-modal-invalid');
     });
 
-    const errorElements = this.form.querySelectorAll('.error-text');
+    const errorElements = this.form.querySelectorAll('.contact-modal-error');
     errorElements.forEach(error => {
       error.textContent = '';
     });
+
+    if (this.successMessage) {
+      this.successMessage.style.display = 'none';
+    }
   }
 }
 

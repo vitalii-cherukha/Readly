@@ -3,6 +3,7 @@ import { getTopBooks, getCategoryList, getBooksByCategory } from './api';
 import {
   createGallery,
   createCategory,
+  renderCounter,
   clearGallery,
   clearCategory,
   showLoader,
@@ -16,11 +17,16 @@ const itemsPerPageMobile = 10;
 let allData = [];
 let currentPage = 1;
 
+const getTotalNow = () => {
+  const total = currentPage * itemsPerPage;
+  return total > allData.length ? allData.length : total;
+};
+
 const renderCategories = async () => {
   try {
     clearCategory();
     const categories = await getCategoryList();
-    createCategory(categories.slice(15));
+    createCategory(categories);
   } catch (error) {
     console.log(error);
   }
@@ -35,6 +41,7 @@ const renderTopBooks = async () => {
     const allBooks = categories.flatMap(category => category.books);
     allData = allBooks;
     createGallery(getPageData(currentPage));
+    renderCounter(getTotalNow(), allBooks.length);
     if (currentPage * itemsPerPage < allData.length) {
       showLoadMoreButton();
     } else {
@@ -57,6 +64,7 @@ const onCategoryClick = async e => {
     const searchQuery = await getBooksByCategory(searchValue);
     allData = searchQuery;
     createGallery(getPageData(currentPage));
+    renderCounter(getTotalNow(), allData.length);
     if (currentPage * itemsPerPage < allData.length) {
       showLoadMoreButton();
     } else {
@@ -75,6 +83,7 @@ const onShowMoreClick = async e => {
     currentPage++;
     e.target.blur();
     createGallery(getPageData(currentPage));
+    renderCounter(getTotalNow(), allData.length);
     showLoadMoreButton();
     if (currentPage * itemsPerPage >= allData.length) {
       hideLoadMoreButton();
@@ -99,8 +108,42 @@ const getPageData = page => {
   return allData.slice(startIndex, endIndex);
 };
 
+const onOpenDropdownClick = e => {
+  refs.dropdownMenu.classList.toggle('is-hidden');
+};
+
+const onCategoryDropdownClick = async e => {
+  try {
+    refs.dropdownMenu.classList.add('is-hidden');
+    showLoader();
+    e.preventDefault();
+    clearGallery();
+    currentPage = 1;
+    const searchValue = e.target.textContent.trim();
+    const searchQuery = await getBooksByCategory(searchValue);
+    allData = searchQuery;
+    createGallery(getPageData(currentPage));
+    renderCounter(getTotalNow(), allData.length);
+
+    if (currentPage * itemsPerPage < allData.length) {
+      showLoadMoreButton();
+    } else {
+      hideLoadMoreButton();
+    }
+  } catch (error) {
+    console.log(error);
+  } finally {
+    hideLoader();
+  }
+  // if (e.target) {
+  //   refs.dropdownMenu.classList.add('is-hidden');
+  // }
+};
+
 renderTopBooks();
 renderCategories();
 
 refs.categoryList.addEventListener('click', onCategoryClick);
 refs.showMoreBtn.addEventListener('click', onShowMoreClick);
+refs.dropdownToggle.addEventListener('click', onOpenDropdownClick);
+refs.dropdownMenu.addEventListener('click', onCategoryDropdownClick);
