@@ -85,7 +85,6 @@
 .contact-modal-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
 }
 
 .contact-modal-form-field {
@@ -235,10 +234,6 @@
 
   .contact-modal-event {
     margin-bottom: 32px;
-  }
-
-  .contact-modal-form {
-    gap: 16px;
   }
 
   .contact-modal-form-btn {

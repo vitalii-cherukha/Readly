@@ -25,5 +25,10 @@ const swiper = new Swiper('.event-list', {
       slidesPerView: 2,
       spaceBetween: 24,
     },
+    1440: {
+      slidesPerView: 3,
+      spaceBetween: 24,
+      enabled: false,
+    },
   },
 });
