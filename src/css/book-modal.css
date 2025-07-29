@@ -9,7 +9,7 @@
   backdrop-filter: blur(4px);
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   z-index: 1000000;
   opacity: 0;
   visibility: hidden;
@@ -66,15 +66,14 @@
   overflow: auto;
   position: relative;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-  padding: 16px 16px;
-  /* Залишаємо стандартний скрол для модального вікна */
+  padding: 64px 16px;
 }
 
 /* Modal header */
 .bm-header {
   display: flex;
   justify-content: flex-end;
-  margin-bottom: 16px;
+  margin-bottom: 0;
 }
 
 .bm-close {
@@ -127,13 +126,16 @@
 .bm-image-column {
   margin: 0 auto;
   width: 100%;
+  flex-shrink: 0;
 }
 
 .bm-cover {
-  margin: 16px auto 0;
+  margin: 0 auto;
   border-radius: 8px;
   width: 309px;
   height: 466px;
+  object-fit: cover;
+  flex-shrink: 0;
 }
 
 .bm-title {
@@ -143,6 +145,9 @@
   line-height: 1.2;
   color: var(--color-scheme-1-text);
   margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .bm-author {
@@ -377,13 +382,24 @@
   opacity: 1;
 }
 
-/* Fixed width for 375px */
+@media screen and (max-width: 374.98px) {
+  .bm-cover {
+    width: 240px;
+    height: 362px;
+  }
+}
+
 @media screen and (min-width: 375px) and (max-width: 767.98px) {
   .bm-window {
     width: 335px;
     min-width: unset;
     max-width: none;
     padding: 64px 32px;
+  }
+
+  .bm-cover {
+    width: 271px;
+    height: 408px;
   }
 }
 
@@ -424,18 +440,19 @@
   .bm-details {
     flex: 1;
     gap: 14px;
-    max-width: none;
+    min-width: 0;
+    max-width: calc(100% - 309px - 24px);
     display: flex;
     flex-direction: column;
   }
 
   .bm-title {
-    font-family: var(--font-family);
-    font-weight: 600;
-    font-size: 24px;
     line-height: 1.17;
     letter-spacing: -0.04em;
-    color: var(--color-scheme-1-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    overflow-wrap: break-word;
   }
 
   .bm-form {
@@ -479,10 +496,6 @@
     flex: 1;
     gap: 20px;
     max-width: none;
-  }
-
-  .bm-title {
-    font-size: 24px;
   }
 
   .bm-form {

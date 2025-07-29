@@ -23,7 +23,15 @@ export async function showBookModal(bookId) {
 
     // Оновлюємо інші дані книги
     const titleEl = document.querySelector('.bm-title');
-    if (titleEl) titleEl.textContent = book.title;
+    if (titleEl) {
+      // Перетворюємо назву в правильний формат (кожне слово з великої літери)
+      const formattedTitle = book.title
+        .toLowerCase()
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+      titleEl.textContent = formattedTitle;
+    }
 
     const authorEl = document.querySelector('.bm-author');
     if (authorEl) authorEl.textContent = book.author;
@@ -152,10 +160,19 @@ accordionButtons.forEach(button => {
 
 // Обробники закриття модального вікна
 
-refs.bookModalContainerEl.addEventListener('click', (e) => {
-  if (e.target === refs.bookModalContainerEl || e.target.classList.contains('bm-overlay')) {
+let mouseDownTarget = null;
+
+refs.bookModalContainerEl.addEventListener('mousedown', (e) => {
+  mouseDownTarget = e.target;
+});
+
+refs.bookModalContainerEl.addEventListener('mouseup', (e) => {
+  // Закриваємо модальне вікно тільки якщо mousedown і mouseup відбулися на overlay
+  if (mouseDownTarget === e.target && 
+      (e.target === refs.bookModalContainerEl || e.target.classList.contains('bm-overlay'))) {
     closeBookModal();
   }
+  mouseDownTarget = null;
 });
 
 document.addEventListener('keydown', (e) => {
