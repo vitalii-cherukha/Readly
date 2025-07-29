@@ -8,6 +8,7 @@
 :root {
   --font-family: 'Rubik', Inter, Avenir, Helvetica, Arial, sans-serif;
 
+  --text-tiny-normal: 400 12px / 1.5 "Rubik", sans-serif;
   --text-small-normal: 400 14px / 1.5 "Rubik", sans-serif;
   --text-regular-normal: 400 16px / 1.5 "Rubik", sans-serif;
   --text-regular-semi-bold: 600 16px / 1.5 "Rubik", sans-serif;
@@ -19,6 +20,8 @@
   --display-mobile-xl: 600 36px / 1.2 "Rubik", sans-serif;
   --display-mobile-xxl: 600 40px / 1.2 "Rubik", sans-serif;
   --display-desktop-tagline: 600 16px / 1.5 "Rubik", sans-serif;
+  --display-desktop-sm: 400 24px / 1.4 "Rubik", sans-serif;
+  --display-desktop-xs: 400 20px / 1.4 "Rubik", sans-serif;
   --display-desktop-xl: 600 48px / 1.2 "Rubik", sans-serif;
 }
 
