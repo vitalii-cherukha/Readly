@@ -94,3 +94,16 @@ export const showLoadMoreButton = () => {
 export const hideLoadMoreButton = () => {
   refs.showMoreBtn.classList.add('is-hidden');
 };
+
+export const filterUniqueBooksByTitle = books => {
+  const seen = new Set();
+  return books.filter(book => {
+    const normalizedTitle = book.title.trim().toLowerCase();
+    if (seen.has(normalizedTitle)) {
+      return false;
+    } else {
+      seen.add(normalizedTitle);
+      return true;
+    }
+  });
+};
