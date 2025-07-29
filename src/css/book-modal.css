@@ -9,7 +9,7 @@
   backdrop-filter: blur(4px);
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   z-index: 1000000;
   opacity: 0;
   visibility: hidden;
@@ -31,18 +31,7 @@
   padding: 0 16px;
 }
 
-@media screen and (min-width: 768px) {
-  .bm-container {
-    padding: 0 32px;
-  }
-}
-
-@media screen and (min-width: 1440px) {
-  .bm-container {
-    padding: 0 104px;
-  }
-}
-
+/* Центрування модального вікна на планшетах та десктопах */
 /* Приховуємо скролбар WebKit для overlay */
 .bm-overlay::-webkit-scrollbar {
   display: none;
@@ -382,6 +371,58 @@
   opacity: 1;
 }
 
+/* Стилі для повідомлень */
+.bm-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: var(--color-bamboo);
+  color: var(--color-white);
+  padding: 16px 24px;
+  border-radius: 8px;
+  font-family: var(--font-family);
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.5;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000001;
+  transform: translateX(100%);
+  opacity: 0;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  max-width: 400px;
+  word-wrap: break-word;
+}
+
+.bm-notification.show {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+/* ========================================
+   MEDIA QUERIES
+======================================== */
+
+/* Container responsive styles */
+@media screen and (min-width: 768px) {
+  .bm-container {
+    padding: 0 32px;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  .bm-container {
+    padding: 0 104px;
+  }
+}
+
+/* Modal overlay positioning */
+@media screen and (min-width: 768px) {
+  .bm-overlay {
+    align-items: center;
+  }
+}
+
+/* Mobile small screens */
 @media screen and (max-width: 374.98px) {
   .bm-cover {
     width: 240px;
@@ -389,6 +430,7 @@
   }
 }
 
+/* Mobile large screens */
 @media screen and (min-width: 375px) and (max-width: 767.98px) {
   .bm-window {
     width: 335px;
@@ -410,6 +452,7 @@
     width: 307px;
     max-width: none;
   }
+
   .bm-window {
     width: 704px;
     min-width: unset;
@@ -476,6 +519,7 @@
   .bm-buy-now {
     width: 309px;
   }
+
   .bm-window {
     width: 1300px;
     padding: 64px 104px;
@@ -519,34 +563,7 @@
   }
 }
 
-/* Стилі для повідомлень */
-.bm-notification {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  background: var(--color-bamboo);
-  color: var(--color-white);
-  padding: 16px 24px;
-  border-radius: 8px;
-  font-family: var(--font-family);
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 1.5;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  z-index: 1000001;
-  transform: translateX(100%);
-  opacity: 0;
-  transition: transform 0.3s ease, opacity 0.3s ease;
-  max-width: 400px;
-  word-wrap: break-word;
-}
-
-.bm-notification.show {
-  transform: translateX(0);
-  opacity: 1;
-}
-
-/* Адаптив для повідомлень */
+/* Notification responsive styles */
 @media screen and (max-width: 480px) {
   .bm-notification {
     top: 20px;
