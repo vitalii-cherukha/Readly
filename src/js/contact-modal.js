@@ -194,17 +194,15 @@ class ContactModal {
       } else if (trimmedValue.length > 50) {
         isValid = false;
         errorMessage = 'Name must be less than 50 characters';
-      } else if (!/^[\p{L}\p{M}\s'-]+$/u.test(trimmedValue)) {
-        // Змінено регулярний вираз для підтримки всіх мов
+      } else if (!/^[\p{L}\p{M}\s'\-]+$/u.test(trimmedValue)) {
         isValid = false;
         errorMessage =
           'Name can only contain letters, spaces, hyphens and apostrophes';
       }
     }
 
-    // Решта коду залишається незмінною...
     if (field.name === 'email') {
-      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      const emailRegex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
       if (!trimmedValue) {
         isValid = false;
         errorMessage = 'Email is required';
