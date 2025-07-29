@@ -33,17 +33,34 @@ export const createGallery = books => {
 };
 
 export const createCategory = list => {
-  const categoryItemTemplate = list
-    .map(item => {
-      if (item.list_name === '') {
-        return;
-      }
-      return `<li class="books-nav-category-item">
+  if (innerWidth < 1440) {
+    const categoryItemTemplateDropdown = list
+      .map(item => {
+        if (item.list_name === '') {
+          return;
+        }
+        return `<li class="books-dropdown-menu-item"><a href="#">${item.list_name}</a></li>`;
+      })
+      .join('');
+    refs.dropdownMenu.innerHTML = categoryItemTemplateDropdown;
+  } else {
+    const categoryItemTemplate = list
+      .map(item => {
+        if (item.list_name === '') {
+          return;
+        }
+        return `<li class="books-nav-category-item">
           <a href="#">${item.list_name}</a>
         </li>`;
-    })
-    .join('');
-  refs.categoryList.innerHTML = categoryItemTemplate;
+      })
+      .join('');
+    refs.categoryList.innerHTML = categoryItemTemplate;
+  }
+};
+
+export const renderCounter = (itemsNow, itemsAll) => {
+  const counterTemplate = `Showing ${itemsNow} of ${itemsAll}`;
+  refs.counter.textContent = counterTemplate;
 };
 
 export const clearGallery = () => {
