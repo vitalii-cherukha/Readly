@@ -140,6 +140,11 @@
 
 /* Adaptive */
 @media (min-width: 768px) {
+  .feedback-section .feedback-container {
+    background-color: var(--color-bamboo-lightest);
+    padding: 64px 0px;
+    margin: 0 32px;
+  }
   .feedback-card {
     width: 100%;
     max-width: 340px;
