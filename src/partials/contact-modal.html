@@ -23,7 +23,7 @@
           placeholder="Enter your name"
           autocomplete="name"
         />
-        <span class="contact-modal-error-text" data-error="name"
+        <span class="contact-modal-error-text contact-modal-error"
           >Please enter a valid name (2-50 characters)</span
         >
       </div>
@@ -42,7 +42,7 @@
           placeholder="Enter your email"
           autocomplete="email"
         />
-        <span class="contact-modal-error-text" data-error="email"
+        <span class="contact-modal-error-text contact-modal-error"
           >Please enter a valid email address</span
         >
       </div>
@@ -59,7 +59,7 @@
           maxlength="500"
           placeholder="Your message (optional)"
         ></textarea>
-        <span class="contact-modal-error-text" data-error="message"
+        <span class="contact-modal-error-text contact-modal-error"
           >Message is too long (max 500 characters)</span
         >
       </div>
@@ -67,11 +67,7 @@
       <button type="submit" class="contact-modal-form-btn btn">Register</button>
     </form>
 
-    <div
-      class="contact-modal-success-message"
-      style="display: none"
-      data-success-message
-    >
+    <div class="contact-modal-success-message" data-success-message>
       <div class="contact-modal-success-content">
         <h3>Registration Successful!</h3>
         <p>Thank you for registering. We'll send you event details soon.</p>
