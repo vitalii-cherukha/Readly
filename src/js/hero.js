@@ -20,15 +20,29 @@ const heroSwiper = new Swiper('.hero-swiper', {
     onlyInViewport: true, 
   },
 
-  pagination: {
-    el: '.hero-swiper-pagination',
-    clickable: true,
-  },
+  // pagination: {
+  //   el: '.hero-swiper-pagination',
+  //   clickable: true,
+  // },
 
-  speed: 800,
+  speed: 500,
   
   autoplay: {
-  delay: 3000, 
+  delay: 5000, 
   disableOnInteraction: false,
 }
 });
+
+const buttons = document.querySelectorAll('.hero-swiper-btn-prev, .hero-swiper-btn-next');
+buttons.forEach(btn => {
+  btn.addEventListener('mouseup', () => {
+    btn.blur(); 
+  });
+});
+
+document.querySelectorAll('.banner-btn').forEach(button => {
+  button.addEventListener('mouseup', () => {
+    button.blur();
+  });
+});
+
