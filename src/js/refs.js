@@ -23,11 +23,12 @@ export const refs = {
 
   // ========== books
   galleryList: document.querySelector('.books-gallery-list'),
-  categoryList: document.querySelector('.books-nav-category'),
+  categoryList: document.querySelector('.books-nav-category '),
   showMoreBtn: document.querySelector('.books-gallery-btn'),
   loader: document.querySelector('.loader'),
   counter: document.querySelector('.books-nav-counter'),
   dropdownMenu: document.querySelector('.books-dropdown-menu'),
   dropdownToggle: document.querySelector('.books-dropdown-toggle'),
+
   // ========== /books
 };

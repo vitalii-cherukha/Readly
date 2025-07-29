@@ -33,29 +33,32 @@ export const createGallery = books => {
 };
 
 export const createCategory = list => {
-  if (innerWidth < 1440) {
-    const categoryItemTemplateDropdown = list
-      .map(item => {
-        if (item.list_name === '') {
-          return;
-        }
-        return `<li class="books-dropdown-menu-item"><a href="#">${item.list_name}</a></li>`;
-      })
-      .join('');
-    refs.dropdownMenu.innerHTML = categoryItemTemplateDropdown;
-  } else {
-    const categoryItemTemplate = list
-      .map(item => {
-        if (item.list_name === '') {
-          return;
-        }
-        return `<li class="books-nav-category-item">
+  const categoryItemTemplate = list
+    .map(item => {
+      if (item.list_name === '') {
+        return;
+      }
+      return `<li class="books-nav-category-item">
           <a href="#">${item.list_name}</a>
         </li>`;
-      })
-      .join('');
-    refs.categoryList.innerHTML = categoryItemTemplate;
-  }
+    })
+    .join('');
+  refs.categoryList.insertAdjacentHTML('beforeend', categoryItemTemplate);
+};
+
+export const createCategoryDropdown = list => {
+  const categoryItemTemplateDropdown = list
+    .map(item => {
+      if (item.list_name === '') {
+        return;
+      }
+      return `<li class="books-dropdown-menu-item"><a href="#">${item.list_name}</a></li>`;
+    })
+    .join('');
+  refs.dropdownMenu.insertAdjacentHTML(
+    'beforeend',
+    categoryItemTemplateDropdown
+  );
 };
 
 export const renderCounter = (itemsNow, itemsAll) => {
@@ -68,7 +71,12 @@ export const clearGallery = () => {
 };
 
 export const clearCategory = () => {
-  refs.categoryList.innerHTML = '';
+  refs.categoryList.innerHTML = `<li class="books-nav-category-item">
+          <a href="#">All categories</a>
+        </li>`;
+};
+export const clearCategoryDropdown = () => {
+  refs.dropdownMenu.innerHTML = `<li class="books-dropdown-menu-item"><a href="#">All categories</a></li>`;
 };
 
 export const showLoader = () => {

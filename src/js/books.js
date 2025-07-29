@@ -3,14 +3,17 @@ import { getTopBooks, getCategoryList, getBooksByCategory } from './api';
 import {
   createGallery,
   createCategory,
+  createCategoryDropdown,
   renderCounter,
   clearGallery,
   clearCategory,
+  clearCategoryDropdown,
   showLoader,
   hideLoader,
   showLoadMoreButton,
   hideLoadMoreButton,
 } from './books-render-functions';
+import iziToast from 'izitoast';
 
 const itemsPerPage = 24;
 const itemsPerPageMobile = 10;
@@ -18,17 +21,30 @@ let allData = [];
 let currentPage = 1;
 
 const getTotalNow = () => {
-  const total = currentPage * itemsPerPage;
-  return total > allData.length ? allData.length : total;
+  if (innerWidth < 768) {
+    const total = currentPage * itemsPerPageMobile;
+    return total > allData.length ? allData.length : total;
+  } else {
+    const total = currentPage * itemsPerPage;
+    return total > allData.length ? allData.length : total;
+  }
 };
 
-const renderCategories = async () => {
+const onRenderCategories = async e => {
   try {
-    clearCategory();
     const categories = await getCategoryList();
-    createCategory(categories);
+    if (innerWidth < 1440) {
+      clearCategoryDropdown();
+      createCategoryDropdown(categories.slice(0, 30));
+    } else {
+      clearCategory();
+      createCategory(categories.slice(0, 30));
+    }
   } catch (error) {
-    console.log(error);
+    iziToast.error({
+      message: `Error: ${error}`,
+      position: 'topRight',
+    });
   }
 };
 
@@ -48,7 +64,10 @@ const renderTopBooks = async () => {
       hideLoadMoreButton();
     }
   } catch (error) {
-    console.log(error);
+    iziToast.error({
+      message: `Error: ${error}`,
+      position: 'topRight',
+    });
   } finally {
     hideLoader();
   }
@@ -56,22 +75,29 @@ const renderTopBooks = async () => {
 
 const onCategoryClick = async e => {
   try {
-    showLoader();
-    e.preventDefault();
-    clearGallery();
-    currentPage = 1;
-    const searchValue = e.target.textContent.trim();
-    const searchQuery = await getBooksByCategory(searchValue);
-    allData = searchQuery;
-    createGallery(getPageData(currentPage));
-    renderCounter(getTotalNow(), allData.length);
+    if (e.target.textContent === 'All categories') {
+      renderTopBooks();
+    } else {
+      showLoader();
+      e.preventDefault();
+      clearGallery();
+      currentPage = 1;
+      const searchValue = e.target.textContent.trim();
+      const searchQuery = await getBooksByCategory(searchValue);
+      allData = searchQuery;
+      createGallery(getPageData(currentPage));
+      renderCounter(getTotalNow(), allData.length);
+    }
     if (currentPage * itemsPerPage < allData.length) {
       showLoadMoreButton();
     } else {
       hideLoadMoreButton();
     }
   } catch (error) {
-    console.log(error);
+    iziToast.error({
+      message: `Error: ${error}`,
+      position: 'topRight',
+    });
   } finally {
     hideLoader();
   }
@@ -87,6 +113,10 @@ const onShowMoreClick = async e => {
     showLoadMoreButton();
     if (currentPage * itemsPerPage >= allData.length) {
       hideLoadMoreButton();
+      iziToast.info({
+        message: "We're sorry, but you've reached the end of search results.",
+        position: 'topRight',
+      });
     }
     const heightCard =
       refs.galleryList.lastElementChild.getBoundingClientRect().height;
@@ -96,16 +126,25 @@ const onShowMoreClick = async e => {
       behavior: 'smooth',
     });
   } catch (error) {
-    console.log(error);
+    iziToast.error({
+      message: `Error: ${error}`,
+      position: 'topRight',
+    });
   } finally {
     hideLoader();
   }
 };
 
 const getPageData = page => {
-  const startIndex = (page - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  return allData.slice(startIndex, endIndex);
+  if (innerWidth < 768) {
+    const startIndex = (page - 1) * itemsPerPageMobile;
+    const endIndex = startIndex + itemsPerPageMobile;
+    return allData.slice(startIndex, endIndex);
+  } else {
+    const startIndex = (page - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return allData.slice(startIndex, endIndex);
+  }
 };
 
 const onOpenDropdownClick = e => {
@@ -115,15 +154,19 @@ const onOpenDropdownClick = e => {
 const onCategoryDropdownClick = async e => {
   try {
     refs.dropdownMenu.classList.add('is-hidden');
-    showLoader();
-    e.preventDefault();
-    clearGallery();
-    currentPage = 1;
-    const searchValue = e.target.textContent.trim();
-    const searchQuery = await getBooksByCategory(searchValue);
-    allData = searchQuery;
-    createGallery(getPageData(currentPage));
-    renderCounter(getTotalNow(), allData.length);
+    if (e.target.textContent === 'All categories') {
+      renderTopBooks();
+    } else {
+      showLoader();
+      e.preventDefault();
+      clearGallery();
+      currentPage = 1;
+      const searchValue = e.target.textContent.trim();
+      const searchQuery = await getBooksByCategory(searchValue);
+      allData = searchQuery;
+      createGallery(getPageData(currentPage));
+      renderCounter(getTotalNow(), allData.length);
+    }
 
     if (currentPage * itemsPerPage < allData.length) {
       showLoadMoreButton();
@@ -131,18 +174,29 @@ const onCategoryDropdownClick = async e => {
       hideLoadMoreButton();
     }
   } catch (error) {
-    console.log(error);
+    iziToast.error({
+      message: `Error: ${error}`,
+      position: 'topRight',
+    });
   } finally {
     hideLoader();
   }
-  // if (e.target) {
-  //   refs.dropdownMenu.classList.add('is-hidden');
-  // }
+};
+
+const onHideDropdownClick = e => {
+  const isMenu = refs.dropdownMenu.contains(e.target);
+  const isToggle = refs.dropdownToggle.contains(e.target);
+
+  if (!isMenu && !isToggle) {
+    refs.dropdownMenu.classList.add('is-hidden');
+  }
 };
 
 renderTopBooks();
-renderCategories();
+onRenderCategories();
 
+document.addEventListener('click', onHideDropdownClick);
+window.addEventListener('resize', onRenderCategories);
 refs.categoryList.addEventListener('click', onCategoryClick);
 refs.showMoreBtn.addEventListener('click', onShowMoreClick);
 refs.dropdownToggle.addEventListener('click', onOpenDropdownClick);
