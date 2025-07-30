@@ -6,7 +6,7 @@ import 'swiper/css/pagination';
 
 const heroSwiper = new Swiper('.hero-swiper', {
   modules: [Navigation, Pagination, Autoplay],
-  loop: true,
+  loop: false,
 
   navigation: {
     nextEl: '.hero-swiper-btn-next', 
@@ -29,7 +29,7 @@ const heroSwiper = new Swiper('.hero-swiper', {
   
   autoplay: {
   delay: 5000, 
-  disableOnInteraction: false,
+  disableOnInteraction: true,
 }
 });
 

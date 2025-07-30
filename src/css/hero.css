@@ -27,7 +27,7 @@
   top: clamp(76px, 24vw, 90px);
   left: clamp(12px, 4vw, 16px);
   right: clamp(12px, 4vw, 16px);
-  width: clamp(160px, 55vw, 200px);
+  width: clamp(160px, 55vw, 280px);
   box-sizing: border-box;
   overflow-wrap: break-word;
 
@@ -140,10 +140,8 @@
 }
 
 .main-title {
-  font-weight: 600;
-  font-size: 40px;
-  line-height: 120%;
   letter-spacing: -0.01em;
+  font-style: var(--display-mobile-xxl);
   color: var(--color-scheme-1-text);
 }
 
@@ -158,6 +156,7 @@
     display: flex;
     flex-direction: row-reverse;
     justify-content: space-between;
+    align-items: center;
   }
 
   .banner-title {
@@ -194,6 +193,11 @@
 
   .hero-img {
     border-radius: 11px;
+  }
+
+  .hero-swiper-btn-wrapper {
+    gap: 24px;
+    margin-bottom: 0;
   }
 }
 
