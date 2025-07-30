@@ -23,13 +23,11 @@ let allData = [];
 let currentPage = 1;
 
 const getTotalNow = () => {
-  if (currentPage === 1) {
-    return innerWidth < 768 ? firstPerPageMobile : firstPerPage;
-  }
-
   const offset = innerWidth < 768 ? firstPerPageMobile : firstPerPage;
-  const total = offset + (currentPage - 1) * itemsPerPage;
-  return total > allData.length ? allData.length : total;
+  const totalNow =
+    currentPage === 1 ? offset : offset + (currentPage - 1) * itemsPerPage;
+
+  return Math.min(totalNow, allData.length);
 };
 
 const onRenderCategories = async e => {
