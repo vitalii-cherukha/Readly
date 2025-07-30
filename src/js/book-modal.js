@@ -1,5 +1,6 @@
 import { refs } from './refs';
 import { getBooksById } from './api';
+import Accordion from 'accordion-js';
 
 /** BOOK MODAL MODULE */
 
@@ -113,6 +114,11 @@ export async function showBookModal(bookId) {
     // Простіше блокування скролу (як в contact-modal)
     document.body.style.overflow = 'hidden';
     
+    // Ініціалізуємо accordion після відкриття модального вікна
+    setTimeout(() => {
+      initializeAccordion();
+    }, 100);
+    
   } catch (error) {
     console.error('❌ Помилка при завантаженні даних книги:', error);
   }
@@ -125,38 +131,39 @@ export function closeBookModal() {
     modalOverlay.classList.remove('is-open');
   }
   
+  // Знищуємо інстанс accordion при закритті модального вікна
+  if (accordionInstance) {
+    accordionInstance.destroy();
+    accordionInstance = null;
+  }
+  
   // Простіше відновлення скролу (як в contact-modal)
   document.body.style.overflow = '';
 }
 
-// Обробники подій для accordion
-const accordionButtons = document.querySelectorAll('.bm-accordion-header');
+// Ініціалізація accordion-js
+let accordionInstance = null;
 
-accordionButtons.forEach(button => {
-  button.addEventListener('click', () => {
-    const targetId = button.getAttribute('data-target');
-    const content = document.getElementById(targetId);
-    const isActive = content.classList.contains('active');
-    
-    if (isActive) {
-      content.style.height = content.scrollHeight + 'px';
-      content.offsetHeight;
-      content.style.height = '0';
-      content.classList.remove('active');
-      button.setAttribute('aria-expanded', 'false');
-    } else {
-      content.classList.add('active');
-      content.style.height = content.scrollHeight + 'px';
-      button.setAttribute('aria-expanded', 'true');
-      
-      content.addEventListener('transitionend', function handler() {
-        if (!content.classList.contains('active')) return;
-        content.style.height = 'auto';
-        content.removeEventListener('transitionend', handler);
-      });
-    }
+function initializeAccordion() {
+  // Знищуємо попередній інстанс, якщо він існує
+  if (accordionInstance) {
+    accordionInstance.destroy();
+  }
+  
+  // Створюємо новий інстанс accordion-js
+  accordionInstance = new Accordion('.bm-accordion-container', {
+    duration: 300,
+    ariaEnabled: true,
+    collapse: true,
+    showMultiple: false,
+    onlyChildNodes: true,
+    openOnInit: [],
+    elementClass: 'ac',
+    triggerClass: 'ac-trigger',
+    panelClass: 'ac-panel',
+    activeClass: 'is-active'
   });
-});
+}
 
 // Обробники закриття модального вікна
 
