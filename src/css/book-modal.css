@@ -128,7 +128,7 @@
 }
 
 .bm-title {
-  font-family: var(--display-mobile-xxl);
+  font: var(--display-mobile-xxl);
   color: var(--color-scheme-1-text);
   margin: 0 0 8px 0;
   white-space: nowrap;
@@ -137,13 +137,13 @@
 }
 
 .bm-author {
-  font-family: var(--text-small-normal);
+  font: var(--text-small-normal);
   color: var(--color-scheme-2-text);
   margin: 0 0 8px 0;
 }
 
 .bm-price {
-  font-family: var(--display-desktop-sm);
+  font: var(--display-desktop-sm);
   color: var(--color-scheme-1-text);
   margin: 0 0 24px 0;
 }
@@ -216,7 +216,7 @@
   width: 42px;
   height: 40px;
   background: var(--opacity-neutral-darkest-5);
-  font-family: var(--text-regular-normal);
+  font: var(--text-regular-normal);
   text-align: center;
   color: var(--color-scheme-1-text);
   /* Прибираємо стрілки для Chrome, Safari, Edge, Opera */
@@ -251,7 +251,7 @@
   width: 100%;
   max-width: 311px;
   height: 48px;
-  font-family: var(--text-regular-normal);
+  font: var(--text-regular-normal);
   margin-bottom: 24px;
   color: var(--color-white);
   cursor: pointer;
@@ -272,7 +272,7 @@
   width: 100%;
   max-width: 311px;
   height: 48px;
-  font-family: var(--text-regular-normal);
+  font: var(--text-regular-normal);
   color: var(--color-neutral-darkest);
   cursor: pointer;
   transition: background-color 0.3s ease, border-color 0.3s ease;
@@ -325,7 +325,7 @@
   margin: 0;
   height: 0;
   overflow: hidden;
-  font-family: var(--text-regular-normal);
+  font: var(--text-regular-normal);
   color: var(--color-scheme-1-text);
   transition: height 0.3s ease-out;
   opacity: 0;
@@ -399,6 +399,7 @@
   .bm-buy-now {
     width: 307px;
     max-width: none;
+    margin-bottom: 0;
   }
 
   .bm-window {
