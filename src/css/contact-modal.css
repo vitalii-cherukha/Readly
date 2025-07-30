@@ -70,7 +70,6 @@
   color: var(--color-neutral-darkest);
   text-align: center;
   margin-bottom: 16px;
-  letter-spacing: -0.02em;
 }
 
 .contact-modal-event {
@@ -78,7 +77,6 @@
   color: var(--color-neutral-darkest, var(--color-neutral-darkest));
   text-align: center;
   margin-bottom: 48px;
-  line-height: 1.4;
 }
 
 .contact-modal-form {
@@ -146,8 +144,8 @@
   height: 18px;
   line-height: 18px;
   color: #ef4444;
-  margin-top: 2px;
-  margin-bottom: 2px;
+  margin-top: 3px;
+  margin-bottom: 3px;
   opacity: 0;
   transition: opacity 0.2s ease;
 }
@@ -171,7 +169,7 @@
   font: var(--text-regular-normal);
   cursor: pointer;
   transition: all 0.2s ease;
-  margin-top: 12px;
+
   min-height: 48px;
 }
 
@@ -251,6 +249,13 @@
   .contact-modal-form-btn {
     padding: 18px 28px;
     font-size: 18px;
+  }
+}
+@media screen and (min-width: 1440px) {
+  .contact-modal-wrapper {
+    max-width: 866px;
+    min-height: 760px;
+    padding: 64px 64px;
   }
 }
 .scroll-to-top {

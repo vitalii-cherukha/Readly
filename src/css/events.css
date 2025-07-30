@@ -3,47 +3,35 @@
 }
 
 .section-label {
-  font-weight: 600;
-  font-size: 16px;
-  line-height: 1.5;
+  font: var(--text-regular-semi-bold);
   text-transform: capitalize;
   margin-bottom: 16px;
 }
 
 .events-heading {
-  font-weight: 600;
-  font-size: 36px;
-  line-height: 1.2;
+  font: var(--display-mobile-xl);
   letter-spacing: -0.01em;
   max-width: 100%;
   padding-bottom: 16px;
 }
 
 .intro-text {
-  font-weight: 400;
-  font-size: 18px;
-  line-height: 1.5;
+  font: var(--text-medium-normal);
   margin-bottom: 32px;
 }
 
 .event-subhead {
   margin-top: 24px;
-  font-weight: 400;
-  font-size: 24px;
-  line-height: 1.4;
-  letter-spacing: -0.01em;
+  font: var(--display-desktop-sm);
 }
 
 .event-meta {
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 1.5;
+  font: var(--text-regular-normal);
   margin-bottom: 8px;
 }
 
 .event-dscr {
-  font-weight: 400;
-  font-size: 16px;
+  font: var(--text-regular-normal);
   line-height: 1.5;
 }
 
