@@ -32,7 +32,6 @@
 }
 
 /* Центрування модального вікна на планшетах та десктопах */
-/* Приховуємо скролбар WebKit для overlay */
 .bm-overlay::-webkit-scrollbar {
   display: none;
 }
@@ -312,10 +311,7 @@
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
-  font-family: var(--font-family);
-  font-weight: 600;
-  font-size: 18px;
-  line-height: 1.5;
+  font: var(--text-medium-semi-bold);
   color: var(--color-scheme-1-text);
   position: relative;
 }
