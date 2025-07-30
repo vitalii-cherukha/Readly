@@ -1,6 +1,6 @@
 const modal = document.getElementById('signupModal');
 const btn = document.getElementById('signupBtn');
-const span = document.querySelector('.close');
+const span = document.querySelector('.close-btn');
 const alertBox = document.getElementById('customAlert');
 const alertText = document.getElementById('alertText');
 
@@ -20,7 +20,7 @@ function showAlert(message) {
 
 btn.addEventListener('click', function (event) {
   event.preventDefault();
-  const emailInput = document.getElementById('email');
+  const emailInput = document.getElementById('emailInput');
   const email = emailInput.value.trim();
 
   if (!email) {
