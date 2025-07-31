@@ -169,10 +169,6 @@
     align-items: center;
   }
 
-  .hero-list {
-    height: 274px;
-  }
-
   .banner-title {
     position: absolute;
     top: 118px;
@@ -221,10 +217,6 @@
   .hero-item {
     max-width: 100%;
     width: 1312px;
-  }
-
-  .hero-list {
-    height: 395px;
   }
 
   .banner-title {
