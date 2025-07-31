@@ -13,11 +13,11 @@ const heroSwiper = new Swiper('.hero-swiper', {
     prevEl: '.hero-swiper-btn-prev',
   },
 
-  grabCursor: true, 
+  grabCursor: true,
 
   keyboard: {
-    enabled: true, 
-    onlyInViewport: true, 
+    enabled: true,
+    onlyInViewport: true,
   },
 
   // pagination: {
@@ -26,23 +26,15 @@ const heroSwiper = new Swiper('.hero-swiper', {
   // },
 
   speed: 500,
-  
+
   autoplay: {
-  delay: 5000, 
-  disableOnInteraction: true,
-}
+    delay: 5000,
+    disableOnInteraction: false,
+  }
 });
 
-const buttons = document.querySelectorAll('.hero-swiper-btn-prev, .hero-swiper-btn-next');
-buttons.forEach(btn => {
-  btn.addEventListener('mouseup', () => {
-    btn.blur(); 
+document.querySelectorAll('.hero-swiper-btn-prev, .hero-swiper-btn-next, .banner-btn')
+  .forEach(button => {
+    button.addEventListener('mouseup', () => button.blur());
   });
-});
-
-document.querySelectorAll('.banner-btn').forEach(button => {
-  button.addEventListener('mouseup', () => {
-    button.blur();
-  });
-});
 
