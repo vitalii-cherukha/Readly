@@ -7,13 +7,13 @@ import 'swiper/css/pagination';
 const heroSwiper = new Swiper('.hero-swiper', {
   modules: [Navigation, Pagination, Autoplay],
   loop: false,
+  grabCursor: true,
+  preloadImages: false,
 
   navigation: {
-    nextEl: '.hero-swiper-btn-next', 
+    nextEl: '.hero-swiper-btn-next',
     prevEl: '.hero-swiper-btn-prev',
   },
-
-  grabCursor: true,
 
   keyboard: {
     enabled: true,
@@ -27,14 +27,15 @@ const heroSwiper = new Swiper('.hero-swiper', {
 
   speed: 500,
 
-  // autoplay: {
-  //   delay: 5000,
-  //   disableOnInteraction: false,
-  // }
+  autoplay: {
+    delay: 5000,
+    disableOnInteraction: false,
+  },
 });
 
-document.querySelectorAll('.hero-swiper-btn-prev, .hero-swiper-btn-next, .banner-btn')
+
+document
+  .querySelectorAll('.hero-swiper-btn-prev, .hero-swiper-btn-next, .banner-btn')
   .forEach(button => {
     button.addEventListener('mouseup', () => button.blur());
   });
-
