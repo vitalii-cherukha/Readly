@@ -219,6 +219,10 @@
     width: 1312px;
   }
 
+  .hero-list {
+    min-height: 395px;
+  }
+
   .banner-title {
     position: absolute;
     top: 155px;
