@@ -76,11 +76,20 @@
     width: 108px;
     height: 48px;
     padding: 12px 23px;
-    font: var(--text-regular-normal);
     color: var(--color-scheme-3-text);
     border: 1px solid var(--color-neutral-darkest);
     border-radius: 4px;
     background: transparent;
+
+    -webkit-font: var(--text-regular-normal);
+    -moz-font: var(--text-regular-normal);
+    -ms-font: var(--text-regular-normal);
+    -o-font: var(--text-regular-normal);
+    -khtml-font: var(--text-regular-normal);
+    -icab-font: var(--text-regular-normal);
+    -xv-font: var(--text-regular-normal);
+    -wap-font: var(--text-regular-normal);
+    font: var(--text-regular-normal);
   }
   .footer-subs-button:hover,
   .footer-subs-button:focus {
