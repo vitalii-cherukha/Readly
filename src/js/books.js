@@ -30,16 +30,13 @@ const getTotalNow = () => {
   return Math.min(totalNow, allData.length);
 };
 
-const onRenderCategories = async e => {
+const onRenderCategories = async () => {
   try {
     const categories = await getCategoryList();
-    if (innerWidth < 1440) {
-      clearCategoryDropdown();
-      createCategoryDropdown(categories.slice(0, 30));
-    } else {
-      clearCategory();
-      createCategory(categories.slice(0, 30));
-    }
+    clearCategoryDropdown();
+    clearCategory();
+    createCategoryDropdown(categories.slice(0, 50));
+    createCategory(categories.slice(0, 50));
   } catch (error) {
     iziToast.error({
       message: `Error: ${error}`,
@@ -158,6 +155,9 @@ const onCategoryDropdownClick = async e => {
   try {
     refs.dropdownMenu.classList.add('is-hidden');
     if (e.target.textContent === 'All categories') {
+      refs.dropdownToggle.innerHTML = `All categories<svg class="books-dropdown-arrow" width="24" height="24">
+            <use href="/img/sprite.svg#icon-chevron-down"></use>
+          </svg>`;
       renderTopBooks();
     } else {
       showLoader();
@@ -165,6 +165,14 @@ const onCategoryDropdownClick = async e => {
       clearGallery();
       currentPage = 1;
       const searchValue = e.target.textContent.trim();
+      const searchValueSlice = searchValue.slice(0, 20);
+      if (searchValueSlice.length < 20) {
+        refs.dropdownToggle.innerHTML = searchValueSlice;
+      } else {
+        refs.dropdownToggle.innerHTML = `${searchValueSlice}..<svg class="books-dropdown-arrow" width="24" height="24">
+            <use href="/img/sprite.svg#icon-chevron-down"></use>
+          </svg>`;
+      }
       const searchQuery = await getBooksByCategory(searchValue);
       allData = filterUniqueBooksByTitle(searchQuery);
       createGallery(getPageData(currentPage));
@@ -199,7 +207,6 @@ renderTopBooks();
 onRenderCategories();
 
 document.addEventListener('click', onHideDropdownClick);
-window.addEventListener('resize', onRenderCategories);
 refs.categoryList.addEventListener('click', onCategoryClick);
 refs.showMoreBtn.addEventListener('click', onShowMoreClick);
 refs.dropdownToggle.addEventListener('click', onOpenDropdownClick);
