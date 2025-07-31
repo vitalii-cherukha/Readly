@@ -10,18 +10,23 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
+const customAvatars = [
+  '/img/feedbacks/avatar-jane.jpg',
+  '/img/feedbacks/avatar-john.jpg',
+];
+
 const feedbackData = [
   {
     text: 'Great selection, fast delivery, and beautifully packaged books. My go-to store for weekend reads!',
     name: 'Jane Doe',
     role: 'Book Lover, Reader',
-    avatar: 'https://ui-avatars.com/api/?name=Jane+Doe&background=random',
+    avatar: '/img/feedbacks/avatar-jane.jpg',
   },
   {
     text: 'Customer service was super helpful, and my order arrived earlier than expected. Highly recommend!',
     name: 'John Smith',
     role: 'Editor, BookMag',
-    avatar: 'https://ui-avatars.com/api/?name=John+Smith&background=random',
+    avatar: ' /img/feedbacks/avatar-john.jpg',
   },
   {
     text: 'Love the curated picks and clear descriptions. Makes it easy to find my next favorite book.',
@@ -86,15 +91,18 @@ const feedbackData = [
 ];
 const feedbackList = document.querySelector('.feedback-list');
 
-feedbackData.forEach(feedback => {
+feedbackData.forEach((feedback, index) => {
   const li = document.createElement('li');
-  li.classList.add('swiper-slide');
-  li.classList.add('feedback-item');
+  li.classList.add('swiper-slide', 'feedback-item');
+
+  // Вибираємо аватар: перші два — зі свого масиву, інші — з feedbackData
+  const avatarSrc = index < 2 ? customAvatars[index] : feedback.avatar;
+
   li.innerHTML = `
     <div class="feedback-card">
       <p class="quote">"${feedback.text}"</p>
       <div class="author">
-        <img src="${feedback.avatar}" alt="${feedback.name}" class="avatar" />
+        <img src="${avatarSrc}" alt="${feedback.name}" class="avatar" loading="lazy" />
         <div>
           <p class="name">${feedback.name}</p>
           <p class="role">${feedback.role}</p>
@@ -126,12 +134,12 @@ const swiper = new Swiper('.feedback-swiper', {
     },
     768: {
       slidesPerView: 2,
-      slidesPerGroup: 2,
+      slidesPerGroup: 1,
       spaceBetween: 24,
     },
     1440: {
       slidesPerView: 3,
-      slidesPerGroup: 3,
+      slidesPerGroup: 1,
       spaceBetween: 24,
     },
   },
