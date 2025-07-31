@@ -1,11 +1,11 @@
-.swiper {
+/* .swiper {
   opacity: 0;
   transition: opacity 0.2s;
 }
 
 .swiper.swiper-initialized {
   opacity: 1;
-}
+} */
 
 .hero {
   margin-bottom: 32px;
