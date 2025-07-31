@@ -27,10 +27,10 @@ const heroSwiper = new Swiper('.hero-swiper', {
 
   speed: 500,
 
-  // autoplay: {
-  //   delay: 5000,
-  //   disableOnInteraction: false,
-  // }
+  autoplay: {
+    delay: 5000,
+    disableOnInteraction: false,
+  }
 });
 
 document.querySelectorAll('.hero-swiper-btn-prev, .hero-swiper-btn-next, .banner-btn')
