@@ -1,3 +1,12 @@
+.swiper {
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.swiper.swiper-initialized {
+  opacity: 1;
+}
+
 .hero {
   margin-bottom: 32px;
 }
@@ -15,6 +24,7 @@
   width: 343px;
   max-width: 100%;
 }
+
 .hero-img {
   display: block;
   width: 100%;
@@ -141,7 +151,7 @@
 
 .main-title {
   letter-spacing: -0.01em;
-  font-style: var(--display-mobile-xxl);
+  font: var(--display-mobile-xxl);
   color: var(--color-scheme-1-text);
 }
 
@@ -176,9 +186,10 @@
   }
 
   .hero-item {
-    max-width: 100%;
     width: 704px;
+    height: 100%;
   }
+
   .banner-btn {
     top: 210px;
     left: 40px;
