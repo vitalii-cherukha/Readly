@@ -73,9 +73,10 @@
 
   .footer-subs-button {
     flex: 0 0 auto;
-    width: 106px;
+    width: 108px;
     height: 48px;
     padding: 12px 23px;
+    font: var(--text-regular-normal);
     color: var(--color-scheme-3-text);
     border: 1px solid var(--color-neutral-darkest);
     border-radius: 4px;
