@@ -162,6 +162,10 @@
 
 /* ============= TAB ==================== */
 @media screen and (min-width: 768px) {
+  .hero-list {
+    height: 274px;
+  }
+
   .main-title-wrapper {
     display: flex;
     flex-direction: row-reverse;
@@ -214,6 +218,10 @@
 
 /* ================== PC =================== */
 @media screen and (min-width: 1440px) {
+  .hero-list {
+    height: 395px;
+  }
+
   .hero-item {
     max-width: 100%;
     width: 1312px;
