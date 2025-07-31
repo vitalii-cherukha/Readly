@@ -165,15 +165,28 @@ const onCategoryDropdownClick = async e => {
       clearGallery();
       currentPage = 1;
       const searchValue = e.target.textContent.trim();
-      const searchValueSlice = searchValue.slice(0, 20);
-      if (searchValueSlice.length < 20) {
-        refs.dropdownToggle.innerHTML = `${searchValueSlice}<svg class="books-dropdown-arrow" width="24" height="24">
+      const searchValueSlice =
+        innerWidth < 768 ? searchValue.slice(0, 30) : searchValue.slice(0, 20);
+      if (innerWidth < 768) {
+        if (searchValueSlice.length < 30) {
+          refs.dropdownToggle.innerHTML = `${searchValueSlice}<svg class="books-dropdown-arrow" width="24" height="24">
             <use href="/img/sprite.svg#icon-chevron-down"></use>
           </svg>`;
+        } else {
+          refs.dropdownToggle.innerHTML = `${searchValueSlice}..<svg class="books-dropdown-arrow" width="24" height="24">
+            <use href="/img/sprite.svg#icon-chevron-down"></use>
+          </svg>`;
+        }
       } else {
-        refs.dropdownToggle.innerHTML = `${searchValueSlice}..<svg class="books-dropdown-arrow" width="24" height="24">
+        if (searchValueSlice.length < 20) {
+          refs.dropdownToggle.innerHTML = `${searchValueSlice}<svg class="books-dropdown-arrow" width="24" height="24">
             <use href="/img/sprite.svg#icon-chevron-down"></use>
           </svg>`;
+        } else {
+          refs.dropdownToggle.innerHTML = `${searchValueSlice}..<svg class="books-dropdown-arrow" width="24" height="24">
+            <use href="/img/sprite.svg#icon-chevron-down"></use>
+          </svg>`;
+        }
       }
       const searchQuery = await getBooksByCategory(searchValue);
       allData = filterUniqueBooksByTitle(searchQuery);
