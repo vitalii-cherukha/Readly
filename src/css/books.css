@@ -67,6 +67,10 @@
   text-overflow: ellipsis;
 }
 
+.books-dropdown-arrow {
+  min-width: 24px;
+}
+
 .books-dropdown-menu {
   display: block;
   position: absolute;
