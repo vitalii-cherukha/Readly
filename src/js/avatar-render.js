@@ -7,7 +7,6 @@ export function renderAvatar(firstName = 'default', lastName = '') {
   }
 
   initials = `${firstName[0] || ''}${lastName[0] || ''}`.toUpperCase();
-  console.log(initials);
 
   // get dark-like random bg color
   function getRandomDarkColor() {
