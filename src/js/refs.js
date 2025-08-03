@@ -44,4 +44,7 @@ export const refs = {
   detailsContent: document.getElementById('details'),
   shippingContent: document.getElementById('shipping'),
   returnsContent: document.getElementById('returns'),
+
+  // === feedbacks ===
+  feedbackList: document.querySelector('.feedback-list'),
 };
