@@ -161,7 +161,8 @@
   transition: transform linear 100ms;
 }
 
-.books-gallery-card:hover {
+.books-gallery-card:hover,
+.books-gallery-card:active {
   transform: scale(1.01);
 }
 
