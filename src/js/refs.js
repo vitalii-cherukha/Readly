@@ -9,8 +9,7 @@ export const refs = {
   footerContainerEl: document.querySelector('.footer-container'),
   heroSection: document.querySelector('.hero'),
 
-  // ========== header
-
+  // === header
   openBtn: document.querySelector('.mobile-open-menu-btn'),
   closeBtn: document.querySelector('.mobile-menu-close-btn'),
   mobileMenu: document.querySelector('.mobile-menu'),
@@ -19,9 +18,7 @@ export const refs = {
   header: document.querySelector('.header'),
   body: document.body,
 
-  // ========== /header
-
-  // ========== books
+  // === books ===
   galleryList: document.querySelector('.books-gallery-list'),
   categoryList: document.querySelector('.books-nav-category '),
   showMoreBtn: document.querySelector('.books-gallery-btn'),
@@ -31,5 +28,20 @@ export const refs = {
   dropdownToggle: document.querySelector('.books-dropdown-toggle'),
   dropdownToggleText: document.querySelector('.books-dropdown-toggle-text'),
 
-  // ========== /books
+  // === books modal ===
+  bookCover: document.querySelector('.bm-cover'),
+  titleEl: document.querySelector('.bm-title'),
+  authorEl: document.querySelector('.bm-author'),
+  priceEl: document.querySelector('.bm-price'),
+  modalOverlay: document.querySelector('.bm-overlay'),
+  closeButton: document.querySelector('.bm-close'),
+  decreaseBtn: document.getElementById('decreaseBtn'),
+  increaseBtn: document.getElementById('increaseBtn'),
+  quantityInput: document.getElementById('quantity'),
+  addToCartBtn: document.querySelector('.bm-add-to-cart'),
+  buyNowBtn: document.querySelector('.bm-buy-now'),
+  bookTitle: document.querySelector('.bm-title'),
+  detailsContent: document.getElementById('details'),
+  shippingContent: document.getElementById('shipping'),
+  returnsContent: document.getElementById('returns'),
 };

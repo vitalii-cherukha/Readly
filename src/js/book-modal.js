@@ -1,86 +1,88 @@
 import { refs } from './refs';
 import { getBooksById } from './api';
 import Accordion from 'accordion-js';
+import iziToast from 'izitoast';
 
 /** BOOK MODAL MODULE */
 
 // Функція для відображення модального вікна з інформацією про книгу
 export async function showBookModal(bookId) {
   if (!refs.bookModalContainerEl) {
-    console.error('❌ Модальне вікно не знайдено! Перевірте refs.bookModalContainerEl');
+    iziToast.error({
+      title: 'Error!',
+      message: 'Modal window not found, check refs.bookModalContainer',
+    });
     return;
   }
-  
+
   try {
     const response = await getBooksById(bookId);
     const book = response.data;
-    
+
     // Оновлюємо зображення книги
-    const bookCover = document.querySelector('.bm-cover');
-    if (bookCover) {
-      bookCover.src = book.book_image;
-      bookCover.alt = book.title;
+    if (refs.bookCover) {
+      refs.bookCover.src = book.book_image;
+      refs.bookCover.alt = book.title;
     }
 
     // Оновлюємо інші дані книги
-    const titleEl = document.querySelector('.bm-title');
-    if (titleEl) {
+    if (refs.titleEl) {
       // Перетворюємо назву в правильний формат (кожне слово з великої літери)
       const formattedTitle = book.title
         .toLowerCase()
         .split(' ')
         .map(word => word.charAt(0).toUpperCase() + word.slice(1))
         .join(' ');
-      titleEl.textContent = formattedTitle;
+      refs.titleEl.textContent = formattedTitle;
     }
 
-    const authorEl = document.querySelector('.bm-author');
-    if (authorEl) authorEl.textContent = book.author;
+    if (refs.authorEl) refs.authorEl.textContent = book.author;
 
-    const priceEl = document.querySelector('.bm-price');
-    if (priceEl) {
+    if (refs.priceEl) {
       // Перевіряємо різні можливі ключі для ціни
       let price = book.list_price || book.price || book.amazon_price;
-      
+
       if (!price && book.buy_links && book.buy_links.length > 0) {
         // Якщо є посилання для покупки, ціна може бути там
         const amazonLink = book.buy_links.find(link => link.name === 'Amazon');
         price = amazonLink?.price;
       }
-      
+
       if (price) {
         // Конвертуємо ціну в число і округлюємо до цілого
         const numericPrice = parseFloat(price);
         if (!isNaN(numericPrice)) {
-          priceEl.textContent = `$${Math.round(numericPrice)}`;
+          refs.priceEl.textContent = `$${Math.round(numericPrice)}`;
         } else {
           // Якщо це не число, показуємо як є з доларом
-          priceEl.textContent = `$${price}`;
+          refs.priceEl.textContent = `$${price}`;
         }
       } else {
         // Якщо ціни немає, показуємо посилання на Amazon або "Ціна уточнюється"
         if (book.amazon_product_url) {
-          priceEl.innerHTML = `<a href="${book.amazon_product_url}" target="_blank" style="color: var(--color-bamboo); text-decoration: none;">Переглянути ціну на Amazon</a>`;
+          refs.priceEl.innerHTML = `<a href="${book.amazon_product_url}" target="_blank" style="color: var(--color-bamboo); text-decoration: none;">Переглянути ціну на Amazon</a>`;
         } else {
-          priceEl.textContent = 'Ціна уточнюється';
+          refs.priceEl.textContent = 'Ціна уточнюється';
         }
       }
     }
 
-    const detailsContent = document.getElementById('details');
-    if (detailsContent) {
+    if (refs.detailsContent) {
       const detailsHTML = `
         <p><strong>Author:</strong> ${book.author}</p>
         <p><strong>Publisher:</strong> ${book.publisher || 'Not specified'}</p>
-        <p><strong>Book Category:</strong> ${book.list_name || 'Not specified'}</p>
-        <p><strong>Description:</strong> ${book.description || 'No description available'}</p>
+        <p><strong>Book Category:</strong> ${
+          book.list_name || 'Not specified'
+        }</p>
+        <p><strong>Description:</strong> ${
+          book.description || 'No description available'
+        }</p>
       `;
-      detailsContent.innerHTML = detailsHTML;
+      refs.detailsContent.innerHTML = detailsHTML;
     }
 
-    const shippingContent = document.getElementById('shipping');
-    if (shippingContent) {
-      shippingContent.innerHTML = `
+    if (refs.shippingContent) {
+      refs.shippingContent.innerHTML = `
         <p>Delivery Options:</p>
         <ul>
           <li>Standard Delivery: 3-7 business days</li>
@@ -91,9 +93,8 @@ export async function showBookModal(bookId) {
       `;
     }
 
-    const returnsContent = document.getElementById('returns');
-    if (returnsContent) {
-      returnsContent.innerHTML = `
+    if (refs.returnsContent) {
+      refs.returnsContent.innerHTML = `
         <p>Return Policy:</p>
         <ul>
           <li>30-day return window</li>
@@ -106,37 +107,37 @@ export async function showBookModal(bookId) {
     }
 
     // Додаємо клас is-open до overlay
-    const modalOverlay = document.querySelector('.bm-overlay');
-    if (modalOverlay) {
-      modalOverlay.classList.add('is-open');
+    if (refs.modalOverlay) {
+      refs.modalOverlay.classList.add('is-open');
     }
-    
+
     // Простіше блокування скролу (як в contact-modal)
     document.body.style.overflow = 'hidden';
-    
+
     // Ініціалізуємо accordion після відкриття модального вікна
     setTimeout(() => {
       initializeAccordion();
     }, 100);
-    
   } catch (error) {
-    console.error('❌ Помилка при завантаженні даних книги:', error);
+    iziToast.error({
+      title: 'Error',
+      message: `Book load error: ${error}`,
+    });
   }
 }
 
 export function closeBookModal() {
   // Видаляємо клас is-open з overlay
-  const modalOverlay = document.querySelector('.bm-overlay');
-  if (modalOverlay) {
-    modalOverlay.classList.remove('is-open');
+  if (refs.modalOverlay) {
+    refs.modalOverlay.classList.remove('is-open');
   }
-  
+
   // Знищуємо інстанс accordion при закритті модального вікна
   if (accordionInstance) {
     accordionInstance.destroy();
     accordionInstance = null;
   }
-  
+
   // Простіше відновлення скролу (як в contact-modal)
   document.body.style.overflow = '';
 }
@@ -149,7 +150,7 @@ function initializeAccordion() {
   if (accordionInstance) {
     accordionInstance.destroy();
   }
-  
+
   // Створюємо новий інстанс accordion-js
   accordionInstance = new Accordion('.bm-accordion-container', {
     duration: 300,
@@ -161,7 +162,7 @@ function initializeAccordion() {
     elementClass: 'ac',
     triggerClass: 'ac-trigger',
     panelClass: 'ac-panel',
-    activeClass: 'is-active'
+    activeClass: 'is-active',
   });
 }
 
@@ -169,20 +170,23 @@ function initializeAccordion() {
 
 let mouseDownTarget = null;
 
-refs.bookModalContainerEl.addEventListener('mousedown', (e) => {
+refs.bookModalContainerEl.addEventListener('mousedown', e => {
   mouseDownTarget = e.target;
 });
 
-refs.bookModalContainerEl.addEventListener('mouseup', (e) => {
+refs.bookModalContainerEl.addEventListener('mouseup', e => {
   // Закриваємо модальне вікно тільки якщо mousedown і mouseup відбулися на overlay
-  if (mouseDownTarget === e.target && 
-      (e.target === refs.bookModalContainerEl || e.target.classList.contains('bm-overlay'))) {
+  if (
+    mouseDownTarget === e.target &&
+    (e.target === refs.bookModalContainerEl ||
+      e.target.classList.contains('bm-overlay'))
+  ) {
     closeBookModal();
   }
   mouseDownTarget = null;
 });
 
-document.addEventListener('keydown', (e) => {
+document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
     const modalOverlay = document.querySelector('.bm-overlay');
     if (modalOverlay && modalOverlay.classList.contains('is-open')) {
@@ -191,62 +195,65 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-const closeButton = document.querySelector('.bm-close');
-if (closeButton) {
-  closeButton.addEventListener('click', closeBookModal);
+if (refs.closeButton) {
+  refs.closeButton.addEventListener('click', closeBookModal);
 }
 
-// Обробники для кнопок зміни кількості
-const decreaseBtn = document.getElementById('decreaseBtn');
-const increaseBtn = document.getElementById('increaseBtn');
-const quantityInput = document.getElementById('quantity');
-
-if (decreaseBtn && increaseBtn && quantityInput) {
-  decreaseBtn.addEventListener('click', () => {
-    let currentValue = parseInt(quantityInput.value) || 1;
+// Обробники для кнопок зміни кількостіc
+if (refs.decreaseBtn && refs.increaseBtn && refs.quantityInput) {
+  refs.decreaseBtn.addEventListener('click', () => {
+    let currentValue = parseInt(refs.quantityInput.value) || 1;
     if (currentValue > 1) {
-      quantityInput.value = currentValue - 1;
+      refs.quantityInput.value = currentValue - 1;
     }
   });
 
-  increaseBtn.addEventListener('click', () => {
-    let currentValue = parseInt(quantityInput.value) || 1;
-    quantityInput.value = currentValue + 1;
+  refs.increaseBtn.addEventListener('click', () => {
+    let currentValue = parseInt(refs.quantityInput.value) || 1;
+    refs.quantityInput.value = currentValue + 1;
   });
 
-  quantityInput.addEventListener('input', () => {
-    let value = parseInt(quantityInput.value);
+  refs.quantityInput.addEventListener('input', () => {
+    let value = parseInt(refs.quantityInput.value);
     if (isNaN(value) || value < 1) {
-      quantityInput.value = 1;
+      refs.quantityInput.value = 1;
     }
   });
 
-  quantityInput.addEventListener('blur', () => {
-    let value = parseInt(quantityInput.value);
+  refs.quantityInput.addEventListener('blur', () => {
+    let value = parseInt(refs.quantityInput.value);
     if (isNaN(value) || value < 1) {
-      quantityInput.value = 1;
+      refs.quantityInput.value = 1;
     }
   });
 }
 
 // Обробники для кнопок "Add To Cart" і "Buy Now"
-const addToCartBtn = document.querySelector('.bm-add-to-cart');
-const buyNowBtn = document.querySelector('.bm-buy-now');
+if (refs.addToCartBtn) {
+  refs.addToCartBtn.addEventListener('click', e => {
+    e.preventDefault();
+    const quantity = parseInt(refs.quantityInput.value) || 1;
+    const bookTitleText = refs.bookTitle.textContent;
 
-if (addToCartBtn) {
-  addToCartBtn.addEventListener('click', () => {
-    const quantity = parseInt(quantityInput.value) || 1;
-    const bookTitle = document.querySelector('.bm-title')?.textContent || 'книгу';
-    
+    // const bookTitle =
+    //   document.querySelector('.bm-title')?.textContent || 'книгу';
+
     // Показуємо стандартне браузерне повідомлення
-    alert(`Додано до кошика: ${quantity} x "${bookTitle}"`);
+    iziToast.success({
+      message: `${quantity}x of "${bookTitleText}" added to cart `,
+      position: 'topRight',
+    });
   });
 }
 
-if (buyNowBtn) {
-  buyNowBtn.addEventListener('click', () => {
-    alert('Дякуємо за покупку!');
-    
+if (refs.buyNowBtn) {
+  refs.buyNowBtn.addEventListener('click', e => {
+    e.preventDefault();
+    iziToast.success({
+      message: 'Thank you for the purchase',
+      position: 'topRight',
+    });
+
     // Закриваємо модальне вікно відразу після повідомлення
     closeBookModal();
   });
@@ -256,18 +263,19 @@ if (buyNowBtn) {
 window.showBookModal = showBookModal;
 
 // Обробник для кнопок "Learn More"
-document.addEventListener('click', (e) => {
-  const isLearnMoreBtn = 
+document.addEventListener('click', e => {
+  const isLearnMoreBtn =
     e.target.classList.contains('books-gallery-card-btn') ||
     e.target.textContent?.trim() === 'Learn More' ||
     e.target.innerText?.trim() === 'Learn More' ||
     e.target.closest('button')?.textContent?.trim() === 'Learn More';
-  
+
   if (isLearnMoreBtn) {
-    let bookListItem = e.target.closest('li[data-id]') ||
-                       e.target.closest('li') ||
-                       e.target.closest('[data-id]');
-    
+    let bookListItem =
+      e.target.closest('li[data-id]') ||
+      e.target.closest('li') ||
+      e.target.closest('[data-id]');
+
     if (bookListItem && bookListItem.dataset.id) {
       e.preventDefault();
       e.stopPropagation();
