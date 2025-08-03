@@ -4,14 +4,14 @@ export const feedbackData = [
     firstName: 'Jane',
     lastName: 'Doe',
     role: 'Book Lover, Reader',
-    avatar: '/img/feedbacks/avatar-jane.jpg',
+    avatar: '/feedbacks/avatar-jane.jpg',
   },
   {
     text: 'Customer service was super helpful, and my order arrived earlier than expected. Highly recommend!',
     firstName: 'John',
     lastName: ' Smith',
     role: 'Editor, BookMag',
-    avatar: '/img/feedbacks/avatar-john.jpg',
+    avatar: '/feedbacks/avatar-john.jpg',
   },
   {
     text: 'Love the curated picks and clear descriptions. Makes it easy to find my next favorite book.',
