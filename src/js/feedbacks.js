@@ -1,94 +1,23 @@
-//import { refs } from './refs';
-
 //refs.feedbacksContainerEl.insertAdjacentHTML(
 //  'beforeend','<p>feedbacks.js section</p>');
 
+import { refs } from './refs';
 import Swiper from 'swiper';
 import { Navigation, Pagination } from 'swiper/modules';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+import { feedbackData } from './feedbackData';
+import { renderAvatar } from './avatar-render';
+
+renderAvatar('alex dulit');
 
 const customAvatars = [
   '/img/feedbacks/avatar-jane.jpg',
   '/img/feedbacks/avatar-john.jpg',
 ];
 
-const feedbackData = [
-  {
-    text: 'Great selection, fast delivery, and beautifully packaged books. My go-to store for weekend reads!',
-    name: 'Jane Doe',
-    role: 'Book Lover, Reader',
-    avatar: '/img/feedbacks/avatar-jane.jpg',
-  },
-  {
-    text: 'Customer service was super helpful, and my order arrived earlier than expected. Highly recommend!',
-    name: 'John Smith',
-    role: 'Editor, BookMag',
-    avatar: ' /img/feedbacks/avatar-john.jpg',
-  },
-  {
-    text: 'Love the curated picks and clear descriptions. Makes it easy to find my next favorite book.',
-    name: 'Emily Johnson',
-    role: 'Author, Novelist',
-    avatar: 'https://ui-avatars.com/api/?name=Emily+Johnson&background=random',
-  },
-  {
-    text: 'Amazing experience! I’ll definitely come back.',
-    name: 'Liam Green',
-    role: 'Book Collector',
-    avatar: 'https://ui-avatars.com/api/?name=Liam+Green&background=random',
-  },
-  {
-    text: 'Books came in perfect condition. Thank you!',
-    name: 'Olivia Brown',
-    role: 'Student',
-    avatar: 'https://ui-avatars.com/api/?name=Olivia+Brown&background=random',
-  },
-  {
-    text: 'Fast service and high-quality packaging.',
-    name: 'Ethan Wilson',
-    role: 'Library Assistant',
-    avatar: 'https://ui-avatars.com/api/?name=Ethan+Wilson&background=random',
-  },
-  {
-    text: 'Nice recommendations and filters. Easy to use!',
-    name: 'Ava Davis',
-    role: 'Book Blogger',
-    avatar: 'https://ui-avatars.com/api/?name=Ava+Davis&background=random',
-  },
-  {
-    text: 'Loved the gift wrap option! Perfect for birthdays.',
-    name: 'Noah Taylor',
-    role: 'Dad, Reader',
-    avatar: 'https://ui-avatars.com/api/?name=Noah+Taylor&background=random',
-  },
-  {
-    text: 'User-friendly site and quick checkout.',
-    name: 'Isabella Moore',
-    role: 'Journalist',
-    avatar: 'https://ui-avatars.com/api/?name=Isabella+Moore&background=random',
-  },
-  {
-    text: 'Always on time and reliable.',
-    name: 'Mason Thomas',
-    role: 'Book Reviewer',
-    avatar: 'https://ui-avatars.com/api/?name=Mason+Thomas&background=random',
-  },
-  {
-    text: "One of the best book platforms I've used!",
-    name: 'Sophia White',
-    role: 'Writer',
-    avatar: 'https://ui-avatars.com/api/?name=Sophia+White&background=random',
-  },
-  {
-    text: 'Responsive support and great selection!',
-    name: 'Lucas Hall',
-    role: 'Reader',
-    avatar: 'https://ui-avatars.com/api/?name=Lucas+Hall&background=random',
-  },
-];
 const feedbackList = document.querySelector('.feedback-list');
 
 feedbackData.forEach((feedback, index) => {
@@ -96,15 +25,21 @@ feedbackData.forEach((feedback, index) => {
   li.classList.add('swiper-slide', 'feedback-item');
 
   // Вибираємо аватар: перші два — зі свого масиву, інші — з feedbackData
-  const avatarSrc = index < 2 ? customAvatars[index] : feedback.avatar;
+  // const avatarSrc = index < 2 ? customAvatars[index] : feedback.avatar;
+
+  const fullName = `${feedback.firstName} ${feedback.lastName}`;
+  const avatarHtml =
+    feedback.avatar.trim() !== ''
+      ? `<img src="${feedback.avatar}" alt="${fullName}" class="avatar" loading="lazy" />`
+      : renderAvatar(feedback.firstName, feedback.lastName);
 
   li.innerHTML = `
     <div class="feedback-card">
       <p class="quote">"${feedback.text}"</p>
       <div class="author">
-        <img src="${avatarSrc}" alt="${feedback.name}" class="avatar" loading="lazy" />
+        ${avatarHtml}
         <div>
-          <p class="name">${feedback.name}</p>
+          <p class="name">${fullName}</p>
           <p class="role">${feedback.role}</p>
         </div>
       </div>
