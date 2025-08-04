@@ -269,7 +269,7 @@
   background: #e15d05;
   cursor: pointer;
   transition: all 0.3s ease;
-
+border-radius: 50%;
   opacity: 0;
   visibility: hidden;
   transform: translateY(20px);
