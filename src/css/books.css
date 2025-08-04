@@ -180,7 +180,7 @@
   object-fit: cover;
   transform: scale(1.02);
   display: block;
-  border-radius: 8px;
+  border-radius: 20px;
 }
 
 .books-gallery-card-info {
