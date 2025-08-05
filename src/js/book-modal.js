@@ -3,7 +3,116 @@ import { getBooksById } from './api';
 import Accordion from 'accordion-js';
 import iziToast from 'izitoast';
 
+/** FOCUS TRAP CLASS */
+class FocusTrap {
+  constructor(element) {
+    this.element = element;
+    this.focusableElements = [];
+    this.firstFocusableElement = null;
+    this.lastFocusableElement = null;
+    this.previousActiveElement = null;
+  }
+
+  // Селектор для всіх фокусованих елементів
+  getFocusableElements() {
+    const focusableSelectors = [
+      'button',
+      '[href]',
+      'input',
+      'select',
+      'textarea',
+      '[tabindex]:not([tabindex="-1"])'
+    ].join(',');
+
+    this.focusableElements = Array.from(
+      this.element.querySelectorAll(focusableSelectors)
+    ).filter(el => {
+      return !el.disabled && 
+             !el.hidden && 
+             el.offsetWidth > 0 && 
+             el.offsetHeight > 0;
+    });
+
+    this.firstFocusableElement = this.focusableElements[0];
+    this.lastFocusableElement = this.focusableElements[this.focusableElements.length - 1];
+  }
+
+  // Активувати focus trap
+  activate() {
+    // Зберігаємо поточний активний елемент
+    this.previousActiveElement = document.activeElement;
+    
+    // Оновлюємо список фокусованих елементів
+    this.getFocusableElements();
+    
+    // Фокусуємо перший елемент
+    if (this.firstFocusableElement) {
+      this.firstFocusableElement.focus();
+    }
+    
+    // Додаємо обробник подій
+    this.boundHandleKeyDown = this.handleKeyDown.bind(this);
+    document.addEventListener('keydown', this.boundHandleKeyDown);
+  }
+
+  // Деактивувати focus trap
+  deactivate() {
+    // Видаляємо обробник подій
+    if (this.boundHandleKeyDown) {
+      document.removeEventListener('keydown', this.boundHandleKeyDown);
+    }
+    
+    // Повертаємо фокус на попередній елемент
+    if (this.previousActiveElement) {
+      this.previousActiveElement.focus();
+    }
+  }
+
+  // Обробник натискання клавіш
+  handleKeyDown(event) {
+    // Перевіряємо тільки Tab
+    if (event.key !== 'Tab') return;
+
+    // Оновлюємо список елементів (на випадок динамічних змін)
+    this.getFocusableElements();
+
+    // Якщо немає фокусованих елементів
+    if (this.focusableElements.length === 0) {
+      event.preventDefault();
+      return;
+    }
+
+    // Якщо тільки один елемент
+    if (this.focusableElements.length === 1) {
+      event.preventDefault();
+      this.firstFocusableElement.focus();
+      return;
+    }
+
+    // Tab (вперед)
+    if (!event.shiftKey) {
+      if (document.activeElement === this.lastFocusableElement) {
+        event.preventDefault();
+        this.firstFocusableElement.focus();
+      }
+    } 
+    // Shift + Tab (назад)
+    else {
+      if (document.activeElement === this.firstFocusableElement) {
+        event.preventDefault();
+        this.lastFocusableElement.focus();
+      }
+    }
+  }
+}
+
 /** BOOK MODAL MODULE */
+
+// Глобальна змінна для focus trap
+let bookModalFocusTrap = null;
+
+// Глобальна змінна для accordion
+let accordionInstance = null;
 
 // Функція для відображення модального вікна з інформацією про книгу
 export async function showBookModal(bookId) {
@@ -14,11 +123,11 @@ export async function showBookModal(bookId) {
     });
     return;
   }
-
+  
   try {
     const response = await getBooksById(bookId);
     const book = response.data;
-
+    
     // Оновлюємо зображення книги
     if (refs.bookCover) {
       refs.bookCover.src = book.book_image;
@@ -41,13 +150,13 @@ export async function showBookModal(bookId) {
     if (refs.priceEl) {
       // Перевіряємо різні можливі ключі для ціни
       let price = book.list_price || book.price || book.amazon_price;
-
+      
       if (!price && book.buy_links && book.buy_links.length > 0) {
         // Якщо є посилання для покупки, ціна може бути там
         const amazonLink = book.buy_links.find(link => link.name === 'Amazon');
         price = amazonLink?.price;
       }
-
+      
       if (price) {
         // Конвертуємо ціну в число і округлюємо до цілого
         const numericPrice = parseFloat(price);
@@ -110,14 +219,25 @@ export async function showBookModal(bookId) {
     if (refs.modalOverlay) {
       refs.modalOverlay.classList.add('is-open');
     }
-
+    
     // Простіше блокування скролу (як в contact-modal)
     document.body.style.overflow = 'hidden';
-
+    
+    // Активуємо focus trap
+    const modalWindow = document.querySelector('.bm-window');
+    if (modalWindow) {
+      bookModalFocusTrap = new FocusTrap(modalWindow);
+      // Невелика затримка для завершення анімації відкриття
+      setTimeout(() => {
+        bookModalFocusTrap.activate();
+      }, 100);
+    }
+    
     // Ініціалізуємо accordion після відкриття модального вікна
     setTimeout(() => {
       initializeAccordion();
     }, 100);
+    
   } catch (error) {
     iziToast.error({
       title: 'Error',
@@ -127,31 +247,35 @@ export async function showBookModal(bookId) {
 }
 
 export function closeBookModal() {
-  // Видаляємо клас is-open з overlay
-  if (refs.modalOverlay) {
-    refs.modalOverlay.classList.remove('is-open');
+  // Деактивуємо focus trap
+  if (bookModalFocusTrap) {
+    bookModalFocusTrap.deactivate();
+    bookModalFocusTrap = null;
   }
-
+  
   // Знищуємо інстанс accordion при закритті модального вікна
   if (accordionInstance) {
     accordionInstance.destroy();
     accordionInstance = null;
   }
-
+  
+  // Видаляємо клас is-open з overlay
+  if (refs.modalOverlay) {
+    refs.modalOverlay.classList.remove('is-open');
+  }
+  
   // Простіше відновлення скролу (як в contact-modal)
   document.body.style.overflow = '';
 }
 
 // Ініціалізація accordion-js
-let accordionInstance = null;
-
 function initializeAccordion() {
   // Знищуємо попередній інстанс, якщо він існує
   if (accordionInstance) {
     accordionInstance.destroy();
   }
-
-  // Створюємо новий інстанс accordion-js
+  
+  // Створюємо новий інстанс accordion-js зі стандартними класами
   accordionInstance = new Accordion('.bm-accordion-container', {
     duration: 300,
     ariaEnabled: true,
@@ -199,7 +323,7 @@ if (refs.closeButton) {
   refs.closeButton.addEventListener('click', closeBookModal);
 }
 
-// Обробники для кнопок зміни кількостіc
+// Обробники для кнопок зміни кількості
 if (refs.decreaseBtn && refs.increaseBtn && refs.quantityInput) {
   refs.decreaseBtn.addEventListener('click', () => {
     let currentValue = parseInt(refs.quantityInput.value) || 1;
@@ -233,11 +357,10 @@ if (refs.addToCartBtn) {
   refs.addToCartBtn.addEventListener('click', e => {
     e.preventDefault();
     const quantity = parseInt(refs.quantityInput.value) || 1;
-    const bookTitleText = refs.bookTitle.textContent;
+    const bookTitleText = refs.titleEl.textContent;
 
-    // const bookTitle =
-    //   document.querySelector('.bm-title')?.textContent || 'книгу';
-
+    // const bookTitle = document.querySelector('.bm-title')?.textContent || 'книгу';
+    
     // Показуємо стандартне браузерне повідомлення
     iziToast.success({
       message: `${quantity}x of "${bookTitleText}" added to cart `,
@@ -253,7 +376,7 @@ if (refs.buyNowBtn) {
       message: 'Thank you for the purchase',
       position: 'topRight',
     });
-
+    
     // Закриваємо модальне вікно відразу після повідомлення
     closeBookModal();
   });
@@ -262,6 +385,9 @@ if (refs.buyNowBtn) {
 // Інтеграція з секцією books - автоматичне відкриття модального вікна
 window.showBookModal = showBookModal;
 
+// Експорт FocusTrap для використання в інших модалках
+export { FocusTrap };
+
 // Обробник для кнопок "Learn More"
 document.addEventListener('click', e => {
   const isLearnMoreBtn =
@@ -269,13 +395,13 @@ document.addEventListener('click', e => {
     e.target.textContent?.trim() === 'Learn More' ||
     e.target.innerText?.trim() === 'Learn More' ||
     e.target.closest('button')?.textContent?.trim() === 'Learn More';
-
+  
   if (isLearnMoreBtn) {
     let bookListItem =
       e.target.closest('li[data-id]') ||
       e.target.closest('li') ||
       e.target.closest('[data-id]');
-
+    
     if (bookListItem && bookListItem.dataset.id) {
       e.preventDefault();
       e.stopPropagation();
