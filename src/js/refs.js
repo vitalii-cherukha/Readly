@@ -40,10 +40,9 @@ export const refs = {
   quantityInput: document.getElementById('quantity'),
   addToCartBtn: document.querySelector('.bm-add-to-cart'),
   buyNowBtn: document.querySelector('.bm-buy-now'),
-  bookTitle: document.querySelector('.bm-title'),
-  detailsContent: document.getElementById('details'),
-  shippingContent: document.getElementById('shipping'),
-  returnsContent: document.getElementById('returns'),
+  detailsContent: document.querySelectorAll('.ac-panel')[0],
+  shippingContent: document.querySelectorAll('.ac-panel')[1],
+  returnsContent: document.querySelectorAll('.ac-panel')[2],
 
   // === feedbacks ===
   feedbackList: document.querySelector('.feedback-list'),
