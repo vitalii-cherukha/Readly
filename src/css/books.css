@@ -172,6 +172,7 @@
   margin: 0 auto;
   overflow: hidden;
   flex-shrink: 0;
+  border-radius: 8px;
 }
 
 .books-gallery-img {
@@ -180,7 +181,6 @@
   object-fit: cover;
   transform: scale(1.02);
   display: block;
-  border-radius: 20px;
 }
 
 .books-gallery-card-info {
